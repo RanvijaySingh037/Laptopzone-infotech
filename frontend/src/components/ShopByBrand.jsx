@@ -29,7 +29,7 @@ const ShopByBrand = () => {
                 <div className="text-center mb-16">
                     <Title text1={"SHOP BY"} text2={"BRAND"} />
                     <p className="text-slate-500 font-bold text-xs uppercase tracking-[0.3em] mt-4">
-                        Elite Computing from Global Technology Leaders
+                        Top Laptops from Global Brands
                     </p>
                 </div>
 
@@ -65,7 +65,7 @@ const ShopByBrand = () => {
                         onClick={() => navigate('/collection')}
                         className="group flex items-center gap-3 mx-auto bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-200 transition-all duration-500"
                     >
-                        EXPLORE ALL MANUFACTURERS
+                        EXPLORE ALL BRANDS
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>

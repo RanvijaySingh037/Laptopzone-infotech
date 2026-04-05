@@ -5,20 +5,20 @@ const Ourpolicy = () => {
   const policies = [
     {
       icon: assets.exchange_icon,
-      title: "Easy Exchange Policy",
-      description: "Hassle-free hardware exchange and secure data handling for your peace of mind.",
+      title: "Easy Returns",
+      description: "7-day easy return policy for all products. Hassle-free and secure.",
       gradient: "from-slate-800 to-slate-900"
     },
     {
       icon: assets.quality_icon,
-      title: "Premium Warranty",
-      description: "Comprehensive 12-month domestic warranty coverage on all high-end laptops.",
+      title: "100% Genuine",
+      description: "All our laptops are 100% genuine and come with official brand warranty.",
       gradient: "from-blue-700 to-blue-800"
     },
     {
       icon: assets.support_img,
-      title: "Expert Support",
-      description: "Dedicated access to our technical experts for all your hardware queries.",
+      title: "Customer Support",
+      description: "24/7 dedicated customer support for all your queries.",
       gradient: "from-slate-700 to-blue-900"
     }
   ];
@@ -32,10 +32,10 @@ const Ourpolicy = () => {
         {/* Header Section */}
         <div className='text-center mb-20'>
           <h2 className='text-3xl sm:text-4xl font-black text-slate-800 mb-4 uppercase tracking-tighter italic'>
-            OUR COMMITMENT
+            WHY SHOP WITH US?
           </h2>
           <p className='text-sm sm:text-base font-bold text-slate-400 uppercase tracking-[0.2em] max-w-2xl mx-auto'>
-            Built for reliability, backed by India's premier service standards
+            100% Genuine Products | Fast Delivery | Easy Returns
           </p>
         </div>
 
@@ -76,10 +76,10 @@ const Ourpolicy = () => {
         {/* Bottom CTA */}
         <div className='text-center mt-20 pt-10 border-t border-slate-50'>
           <p className='text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-8'>
-            Require any specialized technical assistance or consultation?
+            Need help with your purchase?
           </p>
           <button className='bg-slate-900 text-white px-10 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-200 transition-all duration-500 group flex items-center justify-center gap-3 mx-auto'>
-            CONTACT SUPPORT
+            CONTACT US
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>

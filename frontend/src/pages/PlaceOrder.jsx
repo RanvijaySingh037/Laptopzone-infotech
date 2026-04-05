@@ -9,7 +9,7 @@ const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
   const [loading, setLoading] = useState(false);
 
-  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext)
+  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, currency } = useContext(ShopContext)
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -43,8 +43,8 @@ const PlaceOrder = () => {
         try {
           const { data } = await axios.post(backendUrl + '/api/order/verifyRazorpay', response, { headers: { token } })
           if (data.success) {
-            navigate('/orders');
             setCartItems({});
+            navigate('/orders');
           }
         } catch (error) {
           console.log(error);
@@ -114,17 +114,17 @@ const PlaceOrder = () => {
   return (
     <div className="bg-slate-50 min-h-screen pt-10 sm:pt-20 px-4 sm:px-6 lg:px-8 pb-32">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-black text-slate-800 tracking-tighter uppercase italic">Secure Checkout</h1>
-            <p className="text-slate-500 font-bold text-xs uppercase tracking-[0.2em] flex items-center gap-2">
+        <div className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-1 sm:space-y-2">
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-800 tracking-tighter uppercase italic">Secure Checkout</h1>
+            <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-              Enter Shipment Acquisition Protocol
+              Provide your delivery details
             </p>
           </div>
           <button 
             onClick={() => navigate('/cart')}
-            className="text-blue-700 font-black text-[10px] uppercase tracking-widest hover:underline flex items-center gap-2 transition-all"
+            className="text-blue-700 font-black text-[10px] uppercase tracking-widest hover:underline flex items-center gap-2 transition-all w-fit"
           >
             ← BACK TO CART
           </button>
@@ -132,12 +132,12 @@ const PlaceOrder = () => {
 
         <form onSubmit={onSubmitHandler} className='flex flex-col lg:flex-row gap-16 items-start'>
           {/* Left side - Shipment Details */}
-          <div className='flex-1 w-full bg-white rounded-[2.5rem] shadow-2xl shadow-blue-100/50 p-8 sm:p-12 border border-blue-50 relative overflow-hidden'>
+          <div className='flex-1 w-full bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl shadow-blue-100/50 p-6 sm:p-12 border border-blue-50 relative overflow-hidden'>
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
             
-            <div className='mb-12'>
-              <h2 className="text-2xl font-black text-slate-800 tracking-tighter uppercase italic mb-2">Shipment Information</h2>
-              <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Complete Hardware Delivery Logistics</p>
+            <div className='mb-8 sm:mb-12'>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tighter uppercase italic mb-2">Delivery Address</h2>
+              <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">Items will be delivered to this address</p>
             </div>
 
             <div className="space-y-10">
@@ -152,7 +152,7 @@ const PlaceOrder = () => {
                     value={formData.fullName} 
                     className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:bg-white focus:border-blue-600 outline-none transition-all duration-300 font-bold text-slate-800 placeholder-slate-300" 
                     type="text" 
-                    placeholder="ENTER FULL NAME" 
+                    placeholder="Enter full name" 
                   />
                 </div>
                 <div className="space-y-2">
@@ -167,7 +167,7 @@ const PlaceOrder = () => {
                     value={formData.phone} 
                     className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:bg-white focus:border-blue-600 outline-none transition-all duration-300 font-bold text-slate-800 placeholder-slate-300" 
                     type="tel" 
-                    placeholder="10-DIGIT MOBILE" 
+                    placeholder="10-digit mobile number" 
                   />
                 </div>
               </div>
@@ -196,57 +196,57 @@ const PlaceOrder = () => {
                     value={formData.street} 
                     className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:bg-white focus:border-blue-600 outline-none transition-all duration-300 font-bold text-slate-800 placeholder-slate-300" 
                     type="text" 
-                    placeholder="BLOCK/HSE NO, SECTOR, LOCALITY" 
+                    placeholder="House No, Street, Locality" 
                   />
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="space-y-2 col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                  <div className="space-y-2 col-span-1">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-1">City</label>
                     <input 
                       required 
                       onChange={onChangeHandler} 
                       name='city' 
                       value={formData.city} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase" 
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase text-xs" 
                       type="text" 
                       placeholder="CITY" 
                     />
                   </div>
-                  <div className="space-y-2 col-span-1 md:col-span-2 lg:col-span-1">
+                  <div className="space-y-2 col-span-1">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-1">State</label>
                     <input 
                       required 
                       onChange={onChangeHandler} 
                       name='state' 
                       value={formData.state} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase" 
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase text-xs" 
                       type="text" 
                       placeholder="STATE" 
                     />
                   </div>
-                  <div className="space-y-2 col-span-1 md:col-span-2 lg:col-span-1">
+                  <div className="space-y-2 col-span-1">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-1">Pincode</label>
                     <input 
                       required 
                       onChange={onChangeHandler} 
                       name='pinCode' 
                       value={formData.pinCode} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase" 
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase text-xs" 
                       type="number" 
-                      placeholder="PINCODE" 
+                      placeholder="PIN" 
                     />
                   </div>
-                  <div className="space-y-2 col-span-1 md:col-span-2 lg:col-span-1">
+                  <div className="space-y-2 col-span-1">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-1">Country</label>
                     <input 
                       required 
                       onChange={onChangeHandler} 
                       name='country' 
                       value={formData.country} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase" 
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold text-slate-800 uppercase text-xs" 
                       type="text" 
-                      placeholder="INDIA" 
+                      placeholder="IN" 
                     />
                   </div>
                 </div>
@@ -278,7 +278,7 @@ const PlaceOrder = () => {
                            </div>
                            <div className="min-w-0">
                                <p className="text-[10px] font-black text-slate-800 truncate uppercase italic">{item.name}</p>
-                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{qty} Units • {currency}{item.price.toLocaleString()}</p>
+                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{qty} Qty • {currency}{item.price.toLocaleString()}</p>
                            </div>
                         </div>
                      );
@@ -333,11 +333,11 @@ const PlaceOrder = () => {
                 {loading ? (
                     <div className="flex items-center justify-center gap-3">
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        SYNCHRONIZING...
+                        PROCESSING...
                     </div>
                 ) : (
                     <div className="flex items-center justify-center gap-3">
-                        INITIATE ACQUISITION
+                        PLACE ORDER
                         <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>

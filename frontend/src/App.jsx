@@ -1,23 +1,34 @@
-import React from 'react'
-import ReactDOM from 'react-dom';
-import { Route, Routes} from 'react-router-dom'
-import Home from './pages/Home'
-import Collection from './pages/Collection'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Cart from './pages/Cart'
-import Login from './pages/Login'
-import PlaceOrder from './pages/PlaceOrder'
-import Order from './pages/Order';
+import React, { lazy, Suspense } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+// Static Components
 import Navbar from './components/Navbar'
-import Product from "./pages/Product"
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Verify from './pages/Verify';
-import Profile from './pages/Profile';
-import Wishlist from './pages/Wishlist';
+
+// Lazy Loaded Pages
+const Home = lazy(() => import('./pages/Home'))
+const Collection = lazy(() => import('./pages/Collection'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Cart = lazy(() => import('./pages/Cart'))
+const Login = lazy(() => import('./pages/Login'))
+const PlaceOrder = lazy(() => import('./pages/PlaceOrder'))
+const Order = lazy(() => import('./pages/Order'))
+const Product = lazy(() => import("./pages/Product"))
+const Verify = lazy(() => import('./pages/Verify'))
+const Profile = lazy(() => import('./pages/Profile'))
+const Wishlist = lazy(() => import('./pages/Wishlist'))
+const FAQ = lazy(() => import('./pages/FAQ'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsConditions = lazy(() => import('./pages/TermsConditions'))
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy'))
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'))
+const CancellationPolicy = lazy(() => import('./pages/CancellationPolicy'))
+const CustomerSupport = lazy(() => import('./pages/CustomerSupport'))
 
 const App = () => {
   return (
@@ -49,73 +60,37 @@ const App = () => {
       
       {/* Main Content */}
       <main className='min-h-screen'>
-        <Routes>
-          <Route path='/' element={
-            <div className='w-full'>
-              <Home/>
-            </div>
-          } />
-          <Route path='/collection' element={
-            <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>
-              <Collection/>
-            </div>
-          } />
-          <Route path='/about' element={
-            <div className='w-full'>
-              <About/>
-            </div>
-          } />
-          <Route path='/contact' element={
-            <div className='w-full'>
-              <Contact/>
-            </div>
-          } />
-          <Route path='/product/:productId' element={
-            <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>
-              <Product/>
-            </div>
-          } />
-          <Route path='/cart' element={
-            <div className='w-full'>
-              <Cart/>
-            </div>
-          } />
-          <Route path='/login' element={
-            <div className='w-full'>
-              <Login/>
-            </div>
-          } />
-          <Route path='/place-Order' element={
-            <div className='w-full'>
-              <PlaceOrder/>
-            </div>
-          } />
-          <Route path='/Orders' element={
-            <div className='w-full'>
-              <Order/>
-            </div>
-          } />
-          <Route path="/order" element={
-            <div className='w-full'>
-              <Order />
-            </div>
-          } />
-          <Route path="/verify" element={
-            <div className='w-full'>
-              <Verify />
-            </div>
-          } />
-          <Route path='/wishlist' element={
-            <div className='w-full'>
-              <Wishlist/>
-            </div>
-          } />
-          <Route path="/profile" element={
-            <div className='w-full'>
-              <Profile />
-            </div>
-          } />
-        </Routes>
+        <ScrollToTopOnRoute />
+        <Suspense fallback={
+          <div className='flex items-center justify-center min-h-[60vh]'>
+             <div className='w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
+          </div>
+        }>
+          <Routes>
+            <Route path='/' element={<div className='w-full'><Home/></div>} />
+            <Route path='/collection' element={<div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'><Collection/></div>} />
+            <Route path='/about' element={<div className='w-full'><About/></div>} />
+            <Route path='/contact' element={<div className='w-full'><Contact/></div>} />
+            <Route path='/product/:productId' element={<div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'><Product/></div>} />
+            <Route path='/cart' element={<div className='w-full'><Cart/></div>} />
+            <Route path='/login' element={<div className='w-full'><Login/></div>} />
+            <Route path='/place-Order' element={<div className='w-full'><PlaceOrder/></div>} />
+            <Route path='/Orders' element={<div className='w-full'><Order/></div>} />
+            <Route path="/order" element={<div className='w-full'><Order /></div>} />
+            <Route path="/verify" element={<div className='w-full'><Verify /></div>} />
+            <Route path='/wishlist' element={<div className='w-full'><Wishlist/></div>} />
+            <Route path="/profile" element={<div className='w-full'><Profile /></div>} />
+            
+            {/* Support & Policy Routes */}
+            <Route path="/faq" element={<div className='w-full'><FAQ /></div>} />
+            <Route path="/privacy-policy" element={<div className='w-full'><PrivacyPolicy /></div>} />
+            <Route path="/terms" element={<div className='w-full'><TermsConditions /></div>} />
+            <Route path="/refund-policy" element={<div className='w-full'><RefundPolicy /></div>} />
+            <Route path="/shipping-policy" element={<div className='w-full'><ShippingPolicy /></div>} />
+            <Route path="/cancellation-policy" element={<div className='w-full'><CancellationPolicy /></div>} />
+            <Route path="/support" element={<div className='w-full'><CustomerSupport /></div>} />
+          </Routes>
+        </Suspense>
       </main>
       
       {/* Footer */}
@@ -126,6 +101,17 @@ const App = () => {
     </div>
   )
 }
+
+// Scroll to top on route change component
+const ScrollToTopOnRoute = () => {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 // Scroll to top component
 const ScrollToTop = () => {

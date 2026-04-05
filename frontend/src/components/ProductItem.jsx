@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, memo } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { Link } from 'react-router-dom';
 
@@ -20,13 +20,14 @@ const ProductItem = ({id, image, name, price, processor, ram, storage, displaySi
                             className='w-full h-56 object-contain p-6 group-hover:scale-105 transition-transform duration-700'
                             src={imageUrl}
                             alt={name}
+                            loading="lazy"
                         />
                         {/* Status badge */}
                         <div className="absolute top-4 left-4">
                              <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-white/20">
                                 <p className="text-[10px] font-black text-blue-700 uppercase tracking-widest italic flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-blue-700 rounded-full animate-pulse"></span>
-                                    Premium Stock
+                                    In Stock
                                 </p>
                              </div>
                         </div>
@@ -81,14 +82,14 @@ const ProductItem = ({id, image, name, price, processor, ram, storage, displaySi
                         </div>
                     </>
                 ) : (
-                    <div className='w-full h-56 bg-slate-100 flex items-center justify-center font-black text-slate-300 tracking-widest'>HARDWARE PREVIEW</div>
+                    <div className='w-full h-56 bg-slate-100 flex items-center justify-center font-black text-slate-300 tracking-widest uppercase'>Laptop Image</div>
                 )}
             </div>
             
             <div className="space-y-4 flex-1 flex flex-col">
                 <div className="space-y-1">
                     <div className="flex justify-between items-center text-[10px] font-black tracking-[0.2em] text-blue-600 uppercase">
-                        <span>{brand || "System Architecture"}</span>
+                        <span>{brand || "Laptop Details"}</span>
                     </div>
                     <h3 className='text-base font-black text-slate-800 line-clamp-2 group-hover:text-blue-700 transition-colors tracking-tight leading-tight uppercase'>
                         {name}
@@ -97,7 +98,7 @@ const ProductItem = ({id, image, name, price, processor, ram, storage, displaySi
                 
                 <div className="mt-auto pt-4 border-t border-slate-50 flex items-end justify-between">
                     <div>
-                        <p className='text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] leading-none mb-2'>Unit Price</p>
+                        <p className='text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] leading-none mb-2'>Price</p>
                         <p className='text-2xl font-black text-slate-900 tracking-tighter leading-none'>
                             {currency}{price ? price.toLocaleString() : '0'}
                         </p>
@@ -114,4 +115,4 @@ const ProductItem = ({id, image, name, price, processor, ram, storage, displaySi
     )
 }
 
-export default ProductItem
+export default memo(ProductItem)

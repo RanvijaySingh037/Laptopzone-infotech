@@ -10,6 +10,7 @@ import orderRouter from './routes/orderRoute.js'
 import categoryRouter from './routes/categoryRoute.js'
 import brandRouter from './routes/brandRoute.js'
 import wishlistRouter from './routes/wishlistRoute.js'
+import keepAlive from './utils/keepAlive.js'
 
 // App Config
 const app = express()
@@ -30,8 +31,18 @@ app.use('/api/category', categoryRouter)
 app.use('/api/brand', brandRouter)
 app.use('/api/wishlist', wishlistRouter)
 
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: "OK",
+        uptime: process.uptime()
+    });
+});
+
 app.get('/',(req,res)=>{
     res.send("API working successfully")
 })
 
-app.listen(port,()=> console.log('Server started on PORT : '+port))
+app.listen(port, () => {
+    console.log('Server started on PORT : '+port);
+    keepAlive();
+});

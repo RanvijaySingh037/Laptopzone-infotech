@@ -10,7 +10,7 @@ const ShopByUseCase = () => {
     const useCases = [
         {
             title: "Gaming Laptops",
-            description: "High FPS, obsidian builds, and liquid-cooled performance for elite gaming.",
+            description: "High FPS, durable builds, and top-tier performance for elite gaming.",
             image: gaming_cat,
             path: "/collection?category=Gaming Laptops"
         },
@@ -22,7 +22,7 @@ const ShopByUseCase = () => {
         },
         {
             title: "Creator Series",
-            description: "Precision displays and high-core counts for visual architects and designers.",
+            description: "Precision displays and powerful performance for designers and creatives.",
             image: creator_cat,
             path: "/collection?category=Creator Laptops"
         }
@@ -32,8 +32,8 @@ const ShopByUseCase = () => {
         <div className="py-20 bg-slate-50">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="mb-12 text-center">
-                    <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter">Engineered for Your Workflow</h2>
-                    <p className="text-slate-500 font-medium max-w-2xl mx-auto mt-2 text-lg">Select your specialized hardware profile to begin.</p>
+                    <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter">Find Your Perfect Laptop</h2>
+                    <p className="text-slate-500 font-medium max-w-2xl mx-auto mt-2 text-lg">Choose your category and start shopping.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

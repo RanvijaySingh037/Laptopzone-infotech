@@ -32,7 +32,7 @@ const Wishlist = () => {
                     {wishlistData.length > 0 && (
                         <button 
                             onClick={handleMoveAllToCart}
-                            className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 transition-all duration-500 shadow-xl shadow-slate-200 active:scale-95"
+                            className="w-full md:w-auto bg-slate-900 text-white px-8 py-3.5 sm:py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 transition-all duration-500 shadow-xl shadow-slate-200 active:scale-95"
                         >
                             Deploy All To Cart
                         </button>

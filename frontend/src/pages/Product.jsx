@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets'; 
 import RelatedProducts from '../components/Relatedproducts';
+import SEO from '../components/SEO';
 
 const Product = () => {
   const { productId } = useParams();
@@ -40,17 +41,26 @@ const Product = () => {
     <div className='bg-slate-50 min-h-screen pt-20 px-4 sm:px-10 flex items-center justify-center'>
         <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Initializing Hardware...</p>
+            <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Loading Product Details...</p>
         </div>
     </div>
   );
 
   if (!productData) return <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-    <p className="text-slate-400 font-black uppercase tracking-widest">Hardware Not Found</p>
+    <p className="text-slate-400 font-black uppercase tracking-widest">Product Not Found</p>
   </div>;
 
   return (
     <div className='bg-slate-50 border-t border-slate-100 pt-10 px-4 sm:px-10 lg:px-16 transition-all duration-500'>
+      {productData && (
+        <SEO 
+          title={`${productData.name} - ${productData.processor}`}
+          description={`Buy ${productData.name} featuring ${productData.processor}, ${productData.ram} RAM, and ${productData.storage} storage. Official ${productData.brand?.name || productData.brand} hardware available at LaptopZone.`}
+          keywords={`${productData.brand?.name}, ${productData.processor}, ${productData.ram} laptop, ${productData.name} price`}
+          image={productData.image[0]}
+          url={`/product/${productId}`}
+        />
+      )}
       <div className='max-w-[1400px] mx-auto'>
         
         {/* Main Product Section */}
@@ -63,6 +73,7 @@ const Product = () => {
                 src={image} 
                 className='w-full h-full object-contain p-10 group-hover:scale-105 transition-transform duration-700' 
                 alt={productData.name} 
+                loading="lazy"
               />
               {/* Zoom Indicator */}
               <div className="absolute bottom-6 right-6 bg-white/80 backdrop-blur-md p-3 rounded-2xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 border border-slate-100">
@@ -83,6 +94,7 @@ const Product = () => {
                     image === item ? 'border-blue-600 shadow-blue-100 shadow-lg scale-105' : 'border-transparent hover:border-slate-200'
                   }`}
                   alt=""
+                  loading="lazy"
                 />
               ))}
             </div>
@@ -98,7 +110,7 @@ const Product = () => {
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${productData.stock > 0 ? 'bg-green-50 border-green-100 text-green-700' : 'bg-red-50 border-red-100 text-red-700'}`}>
                         <span className={`w-2 h-2 rounded-full ${productData.stock > 0 ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
                         <p className='text-[10px] font-black uppercase tracking-widest'>
-                            {productData.stock > 0 ? (productData.stock < 10 ? `Only ${productData.stock} Units Left` : 'In Stock & Ready') : 'Inventory Depleted'}
+                            {productData.stock > 0 ? (productData.stock < 10 ? `Only ${productData.stock} units left` : 'In Stock') : 'Out of Stock'}
                         </p>
                     </div>
                 </div>
@@ -114,42 +126,40 @@ const Product = () => {
                         ))}
                     </div>
                     <p className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>
-                        ({productData.ratingsCount || 0} Professional Reviews)
+                        ({productData.ratingsCount || 0} Customer Reviews)
                     </p>
                 </div>
             </div>
 
-            {/* Pricing Architecture */}
-            <div className='bg-white rounded-[2rem] p-8 border border-white shadow-xl shadow-slate-200/50 space-y-6'>
-                <div className="flex items-end gap-4">
-                    <p className='text-5xl font-black text-slate-950 tracking-tighter'>
+            {/* Price Details */}
+            <div className='bg-white rounded-[2rem] p-6 sm:p-8 border border-white shadow-xl shadow-slate-200/50 space-y-6'>
+                <div className="flex items-end gap-3 sm:gap-4">
+                    <p className='text-4xl sm:text-5xl font-black text-slate-950 tracking-tighter'>
                         {currency}{productData.price.toLocaleString()}
                     </p>
                     {productData.originalPrice > productData.price && (
                         <div className="flex flex-col gap-0 pb-1">
-                            <span className="text-slate-400 text-sm line-through font-bold">{currency}{productData.originalPrice.toLocaleString()}</span>
-                            <span className="text-green-600 text-xs font-black uppercase tracking-tighter">Save {productData.discountPercent || Math.round(((productData.originalPrice - productData.price) / productData.originalPrice) * 100)}%</span>
+                            <span className="text-slate-400 text-xs sm:text-sm line-through font-bold">{currency}{productData.originalPrice.toLocaleString()}</span>
+                            <span className="text-green-600 text-[10px] sm:text-xs font-black uppercase tracking-tighter">{productData.discountPercent || Math.round(((productData.originalPrice - productData.price) / productData.originalPrice) * 100)}% Off</span>
                         </div>
                     )}
                 </div>
 
                 {/* Key Hardware Snapshot */}
-                <div className="grid grid-cols-3 gap-3">
-                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group hover:border-blue-200 transition-colors">
-                        <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>CPU</p>
-                        <p className='text-[11px] font-black text-slate-800 leading-none truncate'>{productData.processor?.split(' ')[0] || "i7"}</p>
+                    <div className="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100 group hover:border-blue-200 transition-colors">
+                        <p className='text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>Processor</p>
+                        <p className='text-[10px] sm:text-[11px] font-black text-slate-800 leading-none truncate'>{productData.processor?.split(' ')[0] || "i7"}</p>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group hover:border-indigo-200 transition-colors">
-                        <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>RAM</p>
-                        <p className='text-[11px] font-black text-slate-800 leading-none truncate'>{productData.ram || "16GB"}</p>
+                    <div className="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100 group hover:border-indigo-200 transition-colors">
+                        <p className='text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>RAM</p>
+                        <p className='text-[10px] sm:text-[11px] font-black text-slate-800 leading-none truncate'>{productData.ram || "16GB"}</p>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group hover:border-purple-200 transition-colors">
-                        <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>STORAGE</p>
-                        <p className='text-[11px] font-black text-slate-800 leading-none truncate'>{productData.storage || "512GB"}</p>
+                    <div className="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100 group hover:border-purple-200 transition-colors">
+                        <p className='text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1'>Storage</p>
+                        <p className='text-[10px] sm:text-[11px] font-black text-slate-800 leading-none truncate'>{productData.storage || "512GB"}</p>
                     </div>
-                </div>
 
-                {/* Interaction Terminal */}
+                {/* Buying Options */}
                 <div className='space-y-4 pt-4'>
                     <div className="flex items-center gap-4">
                         <div className="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
@@ -182,13 +192,13 @@ const Product = () => {
                             onClick={handleAddToCart}
                             className='flex-1 bg-slate-900 text-white px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-700 transition-all duration-500 shadow-xl shadow-slate-200 active:scale-[0.98]'
                         >
-                            Deploy to Cart
+                            Add to Cart
                         </button>
                         <button 
                             onClick={handleBuyNow}
                             className='flex-1 bg-blue-700 text-white px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-blue-100 active:scale-[0.98]'
                         >
-                            Instant Purchase
+                            Buy Now
                         </button>
                     </div>
                 </div>
@@ -200,7 +210,7 @@ const Product = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Global Shipping</p>
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Free Delivery</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-6 h-6 bg-green-50 rounded-lg flex items-center justify-center">
@@ -215,21 +225,21 @@ const Product = () => {
           </div>
         </div>
 
-        {/* Dynamic Information Architecture */}
+        {/* Product Information */}
         <div className='mt-24 space-y-10'>
           
           {/* Tab Navigation */}
-          <div className='flex items-center gap-8 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide'>
+          <div className='flex items-center gap-2 sm:gap-8 border-b border-slate-200 overflow-x-auto pb-px scrollbar-hide'>
             {[
-                { id: 'description', label: 'Hardware Overview' },
-                { id: 'specs', label: 'Technical Specs' },
-                { id: 'reviews', label: 'Expert Reviews' },
-                { id: 'shipping', label: 'Logistics & Warranty' }
+                { id: 'description', label: 'Description' },
+                { id: 'specs', label: 'Specifications' },
+                { id: 'reviews', label: 'Reviews' },
+                { id: 'shipping', label: 'Shipping' }
             ].map(tab => (
                 <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`pb-6 text-[10px] font-black uppercase tracking-[0.25em] transition-all duration-300 relative whitespace-nowrap px-4 ${
+                    className={`pb-4 sm:pb-6 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] transition-all duration-300 relative whitespace-nowrap px-3 sm:px-4 ${
                         activeTab === tab.id 
                             ? 'text-blue-700' 
                             : 'text-slate-400 hover:text-slate-600'
@@ -247,22 +257,22 @@ const Product = () => {
             {activeTab === 'description' && (
               <div className='max-w-4xl space-y-8 animate-fade-in'>
                 <div className="space-y-4">
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter italic">Machine Intelligence & Design</h3>
+                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter italic">Product Description</h3>
                     <p className='text-slate-600 leading-relaxed font-medium text-lg'>
                         {productData.description}
                     </p>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-slate-100'>
                     <div className='space-y-3'>
-                        <p className='text-blue-600 font-black text-[10px] uppercase tracking-widest'>Performance Profile</p>
+                        <p className='text-blue-600 font-black text-[10px] uppercase tracking-widest'>Performance</p>
                         <p className='text-slate-500 text-sm leading-relaxed'>
-                            Optimized for high-end professional scaling with {productData.processor} architecture and {productData.ram} synchronous memory.
+                            Optimized for high-end professional usage with {productData.processor} and {productData.ram} high-speed memory.
                         </p>
                     </div>
                     <div className='space-y-3'>
-                        <p className='text-indigo-600 font-black text-[10px] uppercase tracking-widest'>Visual Infrastructure</p>
+                        <p className='text-indigo-600 font-black text-[10px] uppercase tracking-widest'>Display</p>
                         <p className='text-slate-500 text-sm leading-relaxed'>
-                            Featuring a premium {productData.displaySize || productData.display} display powered by {productData.graphics || "high-fidelity graphics processing"}.
+                            Featuring a premium {productData.displaySize || productData.display} display powered by {productData.graphics || "powerful graphics processing"}.
                         </p>
                     </div>
                 </div>
@@ -277,24 +287,24 @@ const Product = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                         </svg>
                     </div>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter italic">Technical Infrastructure Table</h3>
+                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter italic">Technical Specifications</h3>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-100 rounded-3xl overflow-hidden border border-slate-100 shadow-inner'>
                   {[
-                    { label: 'Manufacturer', value: productData.brand?.name || productData.brand },
-                    { label: 'Hardware Series', value: productData.series || "Official Line" },
-                    { label: 'Processor Unit', value: productData.processor },
-                    { label: 'Memory (RAM)', value: productData.ram },
-                    { label: 'Storage Interface', value: `${productData.storage} ${productData.storageType || "SSD"}` },
-                    { label: 'Display Matrix', value: `${productData.displaySize} ${productData.resolution || ""}` },
-                    { label: 'Graphics Core', value: productData.graphics },
+                    { label: 'Brand', value: productData.brand?.name || productData.brand },
+                    { label: 'Series', value: productData.series || "Official Line" },
+                    { label: 'Processor', value: productData.processor },
+                    { label: 'RAM', value: productData.ram },
+                    { label: 'Storage', value: `${productData.storage} ${productData.storageType || "SSD"}` },
+                    { label: 'Display', value: `${productData.displaySize} ${productData.resolution || ""}` },
+                    { label: 'Graphics', value: productData.graphics },
                     { label: 'Operating System', value: productData.operatingSystem },
-                    { label: 'Battery Capacity', value: productData.battery },
-                    { label: 'Architecture Weight', value: productData.weight },
-                    { label: 'System Color', value: productData.color },
-                    { label: 'Warranty Shield', value: productData.warranty },
-                    { label: 'Condition Status', value: productData.condition },
-                    { label: 'Architecture SKU', value: productData.sku }
+                    { label: 'Battery', value: productData.battery },
+                    { label: 'Weight', value: productData.weight },
+                    { label: 'Color', value: productData.color },
+                    { label: 'Warranty', value: productData.warranty },
+                    { label: 'Condition', value: productData.condition },
+                    { label: 'SKU', value: productData.sku }
                   ].map((spec, i) => (
                     <div key={i} className='bg-white p-8 group hover:bg-slate-50 transition-colors'>
                       <p className='text-[8px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2'>{spec.label}</p>
@@ -312,9 +322,9 @@ const Product = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                 </div>
-                <h3 className="text-xl font-black text-slate-800 uppercase tracking-tighter">Review Matrix Loading</h3>
+                <h3 className="text-xl font-black text-slate-800 uppercase tracking-tighter">Reviews Loading</h3>
                 <p className='text-slate-400 font-medium max-w-sm mx-auto uppercase text-[10px] tracking-widest'>
-                    Currently synchronizing {productData.ratingsCount || 0} expert evaluations and performance logs.
+                    Currently loading customer reviews and ratings.
                 </p>
               </div>
             )}
@@ -324,19 +334,19 @@ const Product = () => {
                     <div className="space-y-6">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-black">S</div>
-                            <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">Shipping Protocol</h4>
+                            <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">Shipping Details</h4>
                         </div>
                         <p className="text-slate-500 text-sm leading-relaxed font-medium">
-                            All LaptopZone hardware is dispatched via priority secure transport. Major metro delivery within 48-72 hours. International shipping includes real-time tracking and professional anti-shock packaging.
+                            All LaptopZone orders are dispatched via secure delivery. Major metro delivery within 48-72 hours. Includes real-time tracking and professional secure packaging.
                         </p>
                     </div>
                     <div className="space-y-6">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center font-black">W</div>
-                            <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">System Warranty Shield</h4>
+                            <h4 className="font-black text-slate-800 uppercase tracking-widest text-xs">Warranty Information</h4>
                         </div>
                         <p className="text-slate-500 text-sm leading-relaxed font-medium">
-                            Standard {productData.warranty || "12-Month"} comprehensive hardware coverage. Includes 24/7 technical support and authorized component replacement policy.
+                            Standard {productData.warranty || "12-Month"} comprehensive hardware coverage. Includes technical support and authorized component replacement policy.
                         </p>
                     </div>
                 </div>

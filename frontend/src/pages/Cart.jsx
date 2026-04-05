@@ -37,7 +37,7 @@ const Cart = () => {
       <div className="bg-slate-50 min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Synchronizing Allocations...</p>
+            <p className="text-slate-400 font-black uppercase tracking-widest text-xs">Loading Cart...</p>
         </div>
       </div>
     );
@@ -48,19 +48,19 @@ const Cart = () => {
       <div className="max-w-[1400px] mx-auto">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 sm:mb-16">
           <div className="space-y-2">
-            <Title text1={"HARDWARE"} text2={"ALLOCATION"} />
+            <Title text1={"YOUR"} text2={"CART"} />
             <p className="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-3">
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
-                Reviewing active system deployments
+                Review your items before checkout
             </p>
           </div>
           {cartData.length > 0 && (
-            <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Fleet Status</p>
+            <div className="bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Cart Summary</p>
                 <div className="h-4 w-px bg-slate-100"></div>
-                <p className="text-sm font-black text-slate-900">{cartData.reduce((sum, item) => sum + item.quantity, 0)} Units Active</p>
+                <p className="text-xs sm:text-sm font-black text-slate-900">{cartData.reduce((sum, item) => sum + item.quantity, 0)} Items</p>
             </div>
           )}
         </div>
@@ -71,9 +71,9 @@ const Cart = () => {
             {/* Cart Items List */}
             <div className="flex-1 w-full space-y-6">
               <div className="hidden lg:grid grid-cols-[3fr_1.5fr_1.5fr_1fr] gap-4 px-8 mb-4 border-b border-slate-100 pb-4">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hardware Configuration</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Deployment Cluster</p>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Pricing Tier</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Product Details</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Quantity</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Total Price</p>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</p>
               </div>
 
@@ -87,32 +87,29 @@ const Cart = () => {
                     className="bg-white rounded-[2rem] p-6 sm:p-8 shadow-xl shadow-slate-200/50 border border-white hover:border-blue-100 transition-all duration-500 group flex flex-col lg:grid lg:grid-cols-[3fr_1.5fr_1.5fr_1fr] gap-6 items-center"
                   >
                     {/* Hardware Info */}
-                    <div className="flex items-center gap-6 w-full lg:w-auto">
-                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
+                    <div className="flex items-center gap-4 sm:gap-6 w-full lg:w-auto">
+                      <div className="relative w-20 h-20 sm:w-32 sm:h-32 bg-slate-50 rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
                         <img
-                          className="w-full h-full object-contain p-4"
+                          className="w-full h-full object-contain p-2 sm:p-4"
                           src={productData.image[0]}
                           alt={productData.name}
                         />
                       </div>
-                      <div className="space-y-4">
+                      <div className="space-y-2 sm:space-y-4 flex-1">
                         <div>
-                            <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-1">
-                                {productData.brand?.name || productData.brand || "System Architecture"}
+                            <p className="text-[8px] sm:text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-0.5 sm:mb-1">
+                                {productData.brand?.name || productData.brand || "Laptop Details"}
                             </p>
-                            <p className="font-black text-slate-900 text-lg sm:text-xl tracking-tighter uppercase leading-tight italic">
+                            <p className="font-black text-slate-900 text-sm sm:text-xl tracking-tighter uppercase leading-tight italic line-clamp-2">
                                 {productData.name}
                             </p>
                         </div>
-                        <div className="flex flex-wrap gap-2 items-center">
-                            <span className="text-[9px] bg-slate-900 text-white px-3 py-1.5 rounded-lg font-black uppercase tracking-widest border border-white/10 shrink-0">
-                                {productData.processor?.split(' ')[0]} {productData.processor?.split(' ')[1]}
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2 items-center">
+                            <span className="text-[8px] sm:text-[9px] bg-slate-900 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg font-black uppercase tracking-widest border border-white/10 shrink-0">
+                                {productData.processor?.split(' ')[0]}
                             </span>
-                            <span className="text-[9px] bg-slate-50 text-slate-600 px-3 py-1.5 rounded-lg font-black uppercase tracking-widest border border-slate-100 shrink-0">
-                                {productData.ram} MEMORY
-                            </span>
-                            <span className="text-[9px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-black uppercase tracking-widest border border-blue-100 shrink-0">
-                                {productData.storage} STORAGE
+                            <span className="text-[8px] sm:text-[9px] bg-slate-50 text-slate-600 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg font-black uppercase tracking-widest border border-slate-100 shrink-0">
+                                {productData.ram}
                             </span>
                         </div>
                       </div>
@@ -139,14 +136,16 @@ const Cart = () => {
                     </div>
 
                     {/* Price Recap */}
-                    <div className="text-center lg:text-right w-full lg:w-auto">
-                        <p className="text-[9px] font-black text-slate-300 uppercase lg:hidden mb-2">Total Price</p>
-                        <p className="text-2xl font-black text-slate-950 tracking-tighter leading-none">
-                            {currency}{(productData.price * item.quantity).toLocaleString()}
-                        </p>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
-                            {currency}{productData.price.toLocaleString()} per unit
-                        </p>
+                    <div className="text-center lg:text-right w-full lg:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-50 sm:block flex justify-between items-center px-4 sm:px-0">
+                        <p className="text-[9px] font-black text-slate-300 uppercase lg:hidden">Total Price</p>
+                        <div>
+                            <p className="text-xl sm:text-2xl font-black text-slate-950 tracking-tighter leading-none">
+                                {currency}{(productData.price * item.quantity).toLocaleString()}
+                            </p>
+                            <p className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                                {currency}{productData.price.toLocaleString()} / unit
+                            </p>
+                        </div>
                     </div>
 
                     {/* Action Decommission */}
@@ -174,7 +173,7 @@ const Cart = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                   </div>
-                  Re-evaluate Inventory
+                  Continue Shopping
                 </button>
               </div>
             </div>
@@ -188,14 +187,14 @@ const Cart = () => {
                         onClick={() => navigate('/place-order')} 
                         className='w-full bg-blue-700 text-white font-black text-xs uppercase tracking-[0.25em] py-6 px-10 rounded-2xl shadow-xl shadow-blue-100 hover:bg-slate-950 transition-all duration-500 flex items-center justify-center gap-3 group active:scale-[0.98]'
                     >
-                        Initialize Checkout
+                        Proceed to Checkout
                         <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </button>
                     <div className="flex items-center justify-center gap-4 py-4 opacity-50">
                         <div className="h-px bg-slate-100 flex-1"></div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Secured Payment Gateway</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">100% Secure Payment</p>
                         <div className="h-px bg-slate-100 flex-1"></div>
                     </div>
                 </div>
@@ -210,14 +209,14 @@ const Cart = () => {
                         </svg>
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Promo Access</p>
-                        <p className="text-lg font-black tracking-tighter uppercase leading-none italic">Apply Hardware Discount</p>
+                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Coupon Code</p>
+                        <p className="text-lg font-black tracking-tighter uppercase leading-none italic">Apply Discount Code</p>
                     </div>
                 </div>
                 <div className="flex gap-2">
                     <input 
                         type="text" 
-                        placeholder="PROTOCOL CODE" 
+                        placeholder="ENTER CODE" 
                         className="flex-1 bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-xs font-black uppercase tracking-widest focus:outline-none focus:border-blue-500 transition-colors placeholder:text-white/20"
                     />
                     <button className="bg-white text-slate-950 px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-400 transition-colors">
@@ -235,15 +234,15 @@ const Cart = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5.2A2 2 0 007.83 20H19" />
                 </svg>
               </div>
-              <h3 className="text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tighter uppercase italic">Fleet Capacity: 0</h3>
+              <h3 className="text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tighter uppercase italic">Your cart is empty</h3>
               <p className="text-slate-400 font-black text-xs uppercase tracking-[0.3em] mb-12 max-w-md mx-auto leading-relaxed">
-                No hardware systems have been allocated to your active configuration.
+                Looks like you haven't added any laptops to your cart yet.
               </p>
               <button
                 onClick={() => navigate('/collection')}
                 className="bg-blue-700 text-white px-12 py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-slate-950 hover:shadow-2xl hover:shadow-blue-200 transition-all duration-500 active:scale-95"
               >
-                Scan Available Hardware
+                Start Shopping
               </button>
             </div>
           </div>

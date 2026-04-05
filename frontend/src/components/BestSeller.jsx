@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import ProductItem from "./ProductItem";
+import Skeleton from "./Skeleton";
 import { useNavigate } from "react-router-dom";
 
 const BestSeller = () => {
@@ -21,13 +22,6 @@ const BestSeller = () => {
     navigate('/collection');
   };
 
-  const ProductSkeleton = () => (
-    <div className="animate-pulse bg-slate-800/50 p-4 rounded-3xl border border-slate-700">
-      <div className="bg-slate-700 h-48 rounded-2xl mb-4"></div>
-      <div className="bg-slate-700 h-4 rounded w-3/4 mb-2"></div>
-      <div className="bg-slate-700 h-4 rounded w-1/2"></div>
-    </div>
-  );
 
   return (
     <div className="py-24 bg-slate-900 overflow-hidden relative">
@@ -38,25 +32,25 @@ const BestSeller = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full">
-              <span className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em]">Hardware Benchmarks</span>
+              <span className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em]">Top Rated</span>
             </div>
-            <h2 className="text-5xl font-black text-white uppercase tracking-tighter italic">Elite Performance</h2>
+            <h2 className="text-5xl font-black text-white uppercase tracking-tighter italic">Best Sellers</h2>
             <p className="text-slate-400 font-medium max-w-xl text-lg">
-              Battle-tested and community-approved. These units represent our highest-rated hardware configurations, selected for their exceptional stability and processing throughput.
+              Our most popular and highly-rated laptops, chosen by our customers for their exceptional performance and reliability.
             </p>
           </div>
           <button 
             onClick={handleViewAll}
             className="group flex items-center gap-4 text-white font-black text-xs uppercase tracking-[0.2em] hover:text-blue-400 transition-all duration-300"
           >
-            Access Full Inventory
+            View All Laptops
             <div className="w-12 h-[2px] bg-white group-hover:w-16 group-hover:bg-blue-400 transition-all duration-300"></div>
           </button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {loading ? (
-            [...Array(5)].map((_, i) => <ProductSkeleton key={i} />)
+            <Skeleton type="product" count={5} />
           ) : (
             bestSellers.map((item, index) => (
               <div key={item._id} className="group relative">
@@ -66,8 +60,16 @@ const BestSeller = () => {
                 </div>
                 
                 <div className="bg-slate-800/30 p-4 rounded-[2.5rem] border border-slate-800 group-hover:bg-slate-800/60 group-hover:border-blue-500/30 transition-all duration-500">
-                  <ProductItem
-                    item={item}
+                  <ProductItem 
+                      id={item._id}
+                      name={item.name}
+                      price={item.price}
+                      image={item.image}
+                      processor={item.processor}
+                      ram={item.ram}
+                      storage={item.storage}
+                      displaySize={item.displaySize}
+                      brand={item.brand?.name || item.brand}
                   />
                 </div>
               </div>

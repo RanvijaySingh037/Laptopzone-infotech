@@ -8,6 +8,7 @@ import Orders from "./pages/Order";
 import Login from "./components/Login";
 import Category from "./pages/Category";
 import Brand from "./pages/Brand";
+import Dashboard from "./pages/Dashboard";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,17 +32,20 @@ const App = () => {
        :  <>
           <Navbar setToken={setToken} />
           <hr />
-          <div className="flex w-full">
+          <div className="flex w-full min-h-[calc(100vh-70px)]">
             <Sidebar />
-            <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
-              <Routes>
-                <Route path="/add" element={<Add token={token} />} />
-                <Route path="/edit/:id" element={<Add token={token} />} />
-                <Route path="/list" element={<List token={token} />} />
-                <Route path="/orders" element={<Orders token={token} />} />
-                <Route path="/category" element={<Category token={token} />} />
-                <Route path="/brand" element={<Brand token={token} />} />
-              </Routes>
+            <div className="flex-1 p-4 sm:p-8 md:p-10 text-gray-600 text-base max-w-[1400px]">
+              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8 min-h-full">
+                <Routes>
+                  <Route path="/" element={<Dashboard token={token} />} />
+                  <Route path="/add" element={<Add token={token} />} />
+                  <Route path="/edit/:id" element={<Add token={token} />} />
+                  <Route path="/list" element={<List token={token} />} />
+                  <Route path="/orders" element={<Orders token={token} />} />
+                  <Route path="/category" element={<Category token={token} />} />
+                  <Route path="/brand" element={<Brand token={token} />} />
+                </Routes>
+              </div>
             </div>
           </div>
         </>

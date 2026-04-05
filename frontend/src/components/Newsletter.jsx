@@ -49,15 +49,15 @@ const Newsletter = () => {
         {/* Header */}
         <div className='mb-12'>
           <h2 className='text-3xl sm:text-5xl font-black text-slate-800 mb-6 tracking-tighter uppercase italic'>
-            STAY UPDATED
+            GET EXCLUSIVE OFFERS
           </h2>
           <div className='flex items-center justify-center gap-3 mb-6'>
             <span className='bg-blue-700 text-white px-5 py-2 rounded-xl text-sm font-black tracking-[0.2em] shadow-lg shadow-blue-200'>
-              20% ACCESS
+              20% OFF
             </span>
           </div>
           <p className='text-slate-500 text-lg sm:text-xl font-medium leading-relaxed max-w-2xl mx-auto'>
-            Subscribe now to receive the latest updates on premium laptop launches, expert maintenance tips, and exclusive festive offers.
+            Subscribe now to get the latest updates on new laptop launches, expert tips, and exclusive festive offers.
           </p>
         </div>
 
@@ -65,15 +65,15 @@ const Newsletter = () => {
         <div className='flex flex-wrap justify-center gap-10 mb-12 uppercase text-[10px] font-black tracking-widest text-slate-400'>
           <div className='flex items-center gap-2'>
             <div className='w-1.5 h-1.5 bg-blue-600 rounded-full'></div>
-            Early Access
+            Exclusive Deals
           </div>
           <div className='flex items-center gap-2'>
             <div className='w-1.5 h-1.5 bg-indigo-600 rounded-full'></div>
-            Hardware Alerts
+            New Arrivals
           </div>
           <div className='flex items-center gap-2'>
             <div className='w-1.5 h-1.5 bg-emerald-600 rounded-full'></div>
-            Flash Priority
+            Fast Delivery
           </div>
         </div>
 
@@ -87,7 +87,7 @@ const Newsletter = () => {
               <input 
                 className='w-full py-4 outline-none text-slate-800 placeholder-slate-300 font-bold text-sm' 
                 type="email" 
-                placeholder='ENTER YOUR EMAIL ADDRESS'
+                placeholder='Enter your email address'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -98,7 +98,7 @@ const Newsletter = () => {
               disabled={isLoading}
               className='w-full sm:w-auto bg-slate-900 text-white font-black px-10 py-4 rounded-xl hover:bg-blue-700 transition-all duration-500 disabled:opacity-50 tracking-widest text-xs flex items-center justify-center gap-2 shadow-lg hover:shadow-blue-200'
             >
-              {isLoading ? 'PROCESSING...' : 'SUBSCRIBE'}
+              {isLoading ? 'Processing...' : 'Subscribe Now'}
               {!isLoading && (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />

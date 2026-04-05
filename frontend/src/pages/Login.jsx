@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { auth, provider } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const [currentState, setCurrentState] = useState('Login');
@@ -41,6 +44,33 @@ const Login = () => {
       setLoading(false);
     }
   }
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      
+      const response = await axios.post(backendUrl + '/api/user/google', {
+        email: user.email,
+        name: user.displayName,
+      });
+
+      if (response.data.success) {
+        setToken(response.data.token);
+        localStorage.setItem('token', response.data.token);
+        toast.success('Google login successful!');
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Google login failed or was cancelled');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     if (token) {
@@ -141,6 +171,25 @@ const Login = () => {
                   </svg>
                 </>
               )}
+            </button>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-slate-400 font-bold text-[10px] uppercase tracking-widest">Or continue with</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full bg-white border-2 border-slate-100 text-slate-700 py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-50 hover:border-blue-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group shadow-sm hover:shadow-md"
+            >
+              <FcGoogle className="w-6 h-6 group-hover:scale-110 transition-transform" />
+              GOOGLE
             </button>
           </form>
 

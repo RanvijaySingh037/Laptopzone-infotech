@@ -105,5 +105,45 @@ const adminLogin = async (req,res) => {
     }
 }
 
+// Route for Google Login
+const googleLogin = async (req, res) => {
+    try {
+        const { email, name } = req.body;
+        
+        if (!email) {
+            return res.json({ success: false, message: "Email is required" });
+        }
 
-export { loginUser,registerUser, adminLogin}
+        // Check if user exists
+        let user = await userModel.findOne({ email });
+
+        if (user) {
+            // User exists, login
+            const token = createToken(user._id);
+            res.json({ success: true, token });
+        } else {
+            // Create new user
+            // Generate a random secure password for Google users
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(generatedPassword, salt);
+
+            const newUser = new userModel({
+                name: name || email.split('@')[0],
+                email,
+                password: hashedPassword
+            });
+
+            user = await newUser.save();
+            const token = createToken(user._id);
+
+            res.json({ success: true, token });
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+
+export { loginUser, registerUser, adminLogin, googleLogin }

@@ -39,29 +39,29 @@ const Hero = () => {
             </div>
 
             {/* Content Container */}
-            <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 max-w-5xl space-y-6 md:space-y-8">
+            <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 max-w-5xl space-y-4 md:space-y-8">
                 
                 {/* Hardware Status Badge */}
-                <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full w-fit backdrop-blur-md animate-fade-in">
+                <div className="inline-flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 bg-blue-500/10 border border-blue-500/20 rounded-full w-fit backdrop-blur-md animate-fade-in">
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                     </span>
                     <p className="font-black text-[10px] md:text-xs text-blue-400 uppercase tracking-[0.3em]">
-                        Live Inventory Status: Active
+                        Best Deals Available Now
                     </p>
                 </div>
 
-                {/* Main Headline */}
-                <div className="space-y-4">
-                    <h1 className="text-4xl xs:text-5xl md:text-7xl lg:text-8xl leading-[0.9] font-black text-white uppercase tracking-tighter italic">
-                        Unbeatable<br />
-                        <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Laptop Deals</span>
+                 {/* Main Headline */}
+                <div className="space-y-2 md:space-y-4">
+                    <h1 className="text-3xl xs:text-4xl md:text-7xl lg:text-8xl leading-[1.1] md:leading-[0.9] font-black text-white uppercase tracking-tighter italic">
+                        Best Deals on<br />
+                        <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Laptops</span>
                     </h1>
                     
                     {/* Specialized Segments Subheading */}
-                    <p className="text-slate-400 text-sm md:text-lg lg:text-xl font-medium max-w-xl leading-relaxed">
-                        Precision-engineered hardware for <span className="text-white font-bold italic">Gaming</span>, <span className="text-white font-bold italic">Student Life</span>, and <span className="text-white font-bold italic">Enterprise Office</span> environments. Experience the peak of mobile computing performance.
+                    <p className="text-slate-400 text-xs md:text-lg lg:text-xl font-medium max-w-xl leading-relaxed">
+                        Shop <span className="text-white font-bold italic">Gaming</span>, <span className="text-white font-bold italic">Student</span>, and <span className="text-white font-bold italic">Office Laptops</span> at the best prices. Experience high-performance mobile computing.
                     </p>
                 </div>
 
@@ -84,7 +84,7 @@ const Hero = () => {
                         className="w-full sm:w-auto bg-slate-900/50 text-white border-2 border-slate-800 px-10 py-4 rounded-xl font-black text-xs md:text-sm uppercase tracking-[0.2em] hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1 transition-all duration-500 backdrop-blur-sm active:scale-95 group"
                     >
                         <span className="flex items-center gap-3">
-                            Explore Brands
+                            Explore All Laptops
                             <div className="w-2 h-2 rounded-full bg-blue-500 group-hover:scale-150 transition-transform"></div>
                         </span>
                     </button>
@@ -94,15 +94,15 @@ const Hero = () => {
                 <div className="hidden lg:grid grid-cols-3 gap-12 pt-12 border-t border-white/5 max-w-2xl">
                     <div className="space-y-1">
                         <p className="text-white font-black text-2xl tracking-tighter italic">RTX 40-SERIES</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Available Tech</p>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Latest Technology</p>
                     </div>
                     <div className="space-y-1">
                         <p className="text-white font-black text-2xl tracking-tighter italic">240Hz+</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Pro Displays</p>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Fast Displays</p>
                     </div>
                     <div className="space-y-1">
                         <p className="text-white font-black text-2xl tracking-tighter italic">INTEL I9 / M3</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Processing Power</p>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Top Performance</p>
                     </div>
                 </div>
             </div>

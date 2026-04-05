@@ -38,21 +38,21 @@ function Navbar() {
                 : 'bg-white/80 backdrop-blur-sm'
         }`}>
             {/* Logo */}
-            <Link to='/' className="flex items-center gap-2 group">
+            <Link to='/' className="flex items-center gap-2 group shrink-0">
                 <img 
                     src={assets.logo} 
-                    className="w-40 sm:w-48 hover:scale-105 transition-transform duration-300" 
+                    className="w-32 xs:w-40 sm:w-48 hover:scale-105 transition-transform duration-300" 
                     alt="LaptopZone Infotech Logo" 
                 />
             </Link>
 
             {/* Navigation Links */}
-            <ul className="hidden sm:flex gap-10 text-sm text-gray-800">
+            <ul className="hidden md:flex gap-8 lg:gap-10 text-sm text-gray-800">
                 {[
-                    { name: "HOME", path: "/" },
-                    { name: "COLLECTION", path: "/collection" },
-                    { name: "ABOUT", path: "/about" },
-                    { name: "CONTACT", path: "/contact" }
+                    { name: "Home", path: "/" },
+                    { name: "All Laptops", path: "/collection" },
+                    { name: "About Us", path: "/about" },
+                    { name: "Contact Us", path: "/contact" }
                 ].map((item, index) => (
                     <NavLink
                         to={item.path}
@@ -70,24 +70,22 @@ function Navbar() {
             </ul>
 
             {/* Right Icons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 sm:gap-4">
                 {/* Search Icon */}
-                <Link to="/collection" className="relative group">
-                    <div 
-                        onClick={() => setShowSearch(true)} 
-                        className="p-2 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
-                    >
-                        <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
-                </Link>
+                <div 
+                    onClick={() => setShowSearch(true)} 
+                    className="p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer group"
+                >
+                    <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
 
                 {/* Profile Dropdown */}
                 <div className="group relative">
                     <div 
                         onClick={() => token ? null : navigate('/login')} 
-                        className="p-2 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+                        className="p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
                     >
                         <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -139,28 +137,24 @@ function Navbar() {
                 </div>
 
                 {/* Wishlist Icon */}
-                <Link to="/wishlist" className="relative group">
-                    <div className="p-2 rounded-full hover:bg-blue-50 transition-colors duration-200">
-                        <svg className={`w-5 h-5 group-hover:text-pink-600 transition-colors duration-200 ${getWishlistCount() > 0 ? 'text-pink-500 fill-pink-500' : 'text-gray-600'}`} fill={getWishlistCount() > 0 ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </div>
+                <Link to="/wishlist" className="relative group p-3 rounded-full hover:bg-blue-50 transition-colors duration-200">
+                    <svg className={`w-5 h-5 group-hover:text-pink-600 transition-colors duration-200 ${getWishlistCount() > 0 ? 'text-pink-500 fill-pink-500' : 'text-gray-600'}`} fill={getWishlistCount() > 0 ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
                     {getWishlistCount() > 0 && (
-                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 text-white rounded-full flex items-center justify-center text-[8px] font-black shadow-lg">
+                        <div className="absolute top-2 right-2 w-4 h-4 bg-pink-500 text-white rounded-full flex items-center justify-center text-[8px] font-black shadow-lg">
                             {getWishlistCount()}
                         </div>
                     )}
                 </Link>
 
                 {/* Cart Icon */}
-                <Link to="/cart" className="relative group">
-                    <div className="p-2 rounded-full hover:bg-blue-50 transition-colors duration-200">
-                        <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5.2A2 2 0 007.83 20H19" />
-                        </svg>
-                    </div>
+                <Link to="/cart" className="relative group p-3 rounded-full hover:bg-blue-50 transition-colors duration-200">
+                    <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5.2A2 2 0 007.83 20H19" />
+                    </svg>
                     {getCartItems() > 0 && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-lg animate-pulse">
+                        <div className="absolute top-2 right-2 w-5 h-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-lg animate-pulse">
                             {getCartItems()}
                         </div>
                     )}
@@ -169,9 +163,9 @@ function Navbar() {
                 {/* Mobile Menu Icon */}
                 <button
                     onClick={() => setVisible(true)}
-                    className="p-2 rounded-full hover:bg-blue-50 transition-colors duration-200 sm:hidden"
+                    className="p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 md:hidden"
                 >
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
@@ -203,9 +197,9 @@ function Navbar() {
                 <ul className="px-6 space-y-2">
                     {[
                         { name: "Home", path: "/", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
-                        { name: "Collection", path: "/collection", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
-                        { name: "About", path: "/about", icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-                        { name: "Contact", path: "/contact", icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" }
+                        { name: "All Laptops", path: "/collection", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
+                        { name: "About Us", path: "/about", icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+                        { name: "Contact Us", path: "/contact", icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" }
                     ].map((item, index) => (
                         <li key={index}>
                             <NavLink

@@ -1,11 +1,10 @@
 import userModel from "../models/userModel.js";
+import orderModel from "../models/orderModel.js";
+import productModel from "../models/productModel.js";
 import razorpay from "razorpay";
+import crypto from "crypto";
 import { sendOrderEmail, sendInvoiceEmail } from "../config/emailservice.js";
 import { generateInvoice } from "../config/invoiceGenerator.js";
-
-
-
-
 
 // global variables
 const deliveryCharge = 10;
@@ -71,7 +70,7 @@ const placeOrderRazorpay = async (req, res) => {
     await newOrder.save();
 
     const options = {
-      amount: amount * 100,
+      amount: Math.round(amount * 100),
       currency: currency.toUpperCase(),
       receipt: newOrder._id.toString(),
     }
@@ -99,14 +98,20 @@ const placeOrderRazorpay = async (req, res) => {
 
 const verifyRazorpay = async (req, res) => {
   try {
+    const { userId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    const { userId, razorpay_order_id } = req.body
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
 
-    const orderInfo = await razorepayInstance.orders.fetch(razorpay_order_id)
-    if (orderInfo.status === 'paid') {
-      await orderModel.findByIdAndUpdate(orderInfo.receipt, { payment: true })
-      await userModel.findByIdAndUpdate(userId, { cartData: {} })
-
+    if (razorpay_signature === expectedSign) {
+      // Fetch order to get the receipt ID (which is our Mongo order ID)
+      const orderInfo = await razorepayInstance.orders.fetch(razorpay_order_id);
+      
+      await orderModel.findByIdAndUpdate(orderInfo.receipt, { payment: true });
+      await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
       // Get user email and order data
       const user = await userModel.findById(userId);
@@ -116,13 +121,10 @@ const verifyRazorpay = async (req, res) => {
         await sendOrderEmail(user.email, order.items, order.amount);
       }
 
-
-      res.json({ success: true, message: "Payment Successful" })
+      res.json({ success: true, message: "Payment Successful" });
     } else {
-      res.json({ success: false, message: "Payment Failed" })
-
+      res.json({ success: false, message: "Payment Verification Failed: Invalid Signature" });
     }
-
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -151,6 +153,48 @@ const userOrders = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+// Admin Stats for Dashboard
+const getAdminStats = async (req, res) => {
+  try {
+    const [totalProducts, totalOrders, orders, lowStockProducts, featuredProducts] = await Promise.all([
+      productModel.countDocuments({}),
+      orderModel.countDocuments({}),
+      orderModel.find({}).sort({ date: -1 }),
+      productModel.countDocuments({ stock: { $lte: 5 } }),
+      productModel.countDocuments({ featured: true })
+    ]);
+
+    const totalRevenue = orders
+      .filter(order => order.payment === true)
+      .reduce((total, order) => total + order.amount, 0);
+
+    const recentOrders = orders.slice(0, 10).map(order => ({
+      _id: order._id,
+      amount: order.amount,
+      status: order.status,
+      date: order.date,
+      payment: order.payment,
+      address: order.address
+    }));
+
+    res.json({
+      success: true,
+      stats: {
+        totalProducts,
+        totalOrders,
+        totalRevenue,
+        lowStockCount: lowStockProducts,
+        featuredCount: featuredProducts,
+        recentOrders
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
 
 
 
@@ -190,4 +234,4 @@ const updateStatus = async (req, res) => {
 
 
 
-export { verifyRazorpay, placeOrder, placeOrderRazorpay, allOrders, userOrders, updateStatus }
+export { verifyRazorpay, placeOrder, placeOrderRazorpay, allOrders, userOrders, updateStatus, getAdminStats }

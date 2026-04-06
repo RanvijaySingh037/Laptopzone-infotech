@@ -14,10 +14,25 @@ export const ShopContextProvider = ({ children }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [wishlistItems, setWishlistItems] = useState({});
+  const [buyNowItem, setBuyNowItem] = useState(() => {
+    const saved = localStorage.getItem('buyNowItem');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [isBuyNow, setIsBuyNow] = useState(() => {
+    const saved = localStorage.getItem('isBuyNow');
+    return saved === 'true';
+  });
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => {
+    const savedToken = localStorage.getItem('token');
+    return (savedToken && savedToken !== 'undefined' && savedToken !== 'null') ? savedToken : "";
+  });
   const navigate = useNavigate();
 
   // Add product to cart
@@ -82,12 +97,16 @@ export const ShopContextProvider = ({ children }) => {
 
   // Get total cart price
   const getCartAmount = useCallback(() => {
+    if (isBuyNow && buyNowItem) {
+      const product = products.find(p => p._id === buyNowItem.productId);
+      return product ? product.price * buyNowItem.quantity : 0;
+    }
     return Object.entries(cartItems).reduce((total, [itemId, qty]) => {
       let product = products.find((p) => p._id === itemId);
       if (!product || qty <= 0) return total;
       return total + product.price * qty;
     }, 0);
-  }, [cartItems, products]);
+  }, [cartItems, products, isBuyNow, buyNowItem]);
 
   // Update quantity
   const updateQuantity = useCallback(async (itemId, quantity) => {
@@ -160,6 +179,34 @@ const getUserWishlist = useCallback(async (token, isMounted) => {
     }
 }, [backendUrl]);
 
+  const logout = useCallback(() => {
+    setToken("");
+    localStorage.removeItem('token');
+    setCartItems({});
+    setWishlistItems({});
+    setBuyNowItem(null);
+    setIsBuyNow(false);
+    localStorage.removeItem('buyNowItem');
+    localStorage.removeItem('isBuyNow');
+    toast.success("Signed out successfully");
+    navigate('/login');
+  }, [navigate]);
+
+  const setBuyNow = useCallback((productId, quantity) => {
+    const item = { productId, quantity };
+    setBuyNowItem(item);
+    setIsBuyNow(true);
+    localStorage.setItem('buyNowItem', JSON.stringify(item));
+    localStorage.setItem('isBuyNow', 'true');
+  }, []);
+
+  const clearBuyNow = useCallback(() => {
+    setBuyNowItem(null);
+    setIsBuyNow(false);
+    localStorage.removeItem('buyNowItem');
+    localStorage.removeItem('isBuyNow');
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
     getProductsData(isMounted);
@@ -183,13 +230,15 @@ const getUserWishlist = useCallback(async (token, isMounted) => {
     cartItems, addToCart, setCartItems,
     wishlistItems, toggleWishlist, getWishlistCount,
     getCartItems, getCartAmount,
-    updateQuantity, navigate, backendUrl, token, setToken
+    updateQuantity, navigate, backendUrl, token, setToken, logout,
+    buyNowItem, isBuyNow, setBuyNow, clearBuyNow
   }), [
     products, categories, brands, currency, delivery_fee,
     search, showSearch, cartItems, addToCart,
     wishlistItems, toggleWishlist, getWishlistCount,
     getCartItems, getCartAmount,
-    updateQuantity, navigate, backendUrl, token
+    updateQuantity, navigate, backendUrl, token, logout,
+    buyNowItem, isBuyNow, setBuyNow, clearBuyNow
   ]);
 
   return (

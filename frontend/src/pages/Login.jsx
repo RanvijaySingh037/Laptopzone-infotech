@@ -74,9 +74,15 @@ const Login = () => {
 
   useEffect(() => {
     if (token) {
-      navigate('/');
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      } else {
+        navigate('/');
+      }
     }
-  },[token])
+  },[token, navigate]);
 
   return (
     <div className="bg-slate-50 min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">

@@ -1,123 +1,168 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import hero_tech from '../assets/hero_tech.png'
+import useEmblaCarousel from 'embla-carousel-react'
+import Autoplay from 'embla-carousel-autoplay'
+
+// Asset Imports
+import hero_gaming from '../assets/hero_gaming.png'
+import hero_student from '../assets/hero_student.png'
+import hero_business from '../assets/hero_business.png'
 
 const Hero = () => {
     const navigate = useNavigate();
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, skipSnaps: false }, [Autoplay({ delay: 5000, stopOnInteraction: false })])
+    const [selectedIndex, setSelectedIndex] = useState(0)
 
-    const handleShopNow = () => {
-        navigate('/collection');
-    };
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return
+        setSelectedIndex(emblaApi.selectedScrollSnap())
+    }, [emblaApi])
 
-    const handleExploreBrands = () => {
-        const element = document.getElementById('shop-by-brand');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            navigate('/collection');
+    useEffect(() => {
+        if (!emblaApi) return
+        onSelect()
+        emblaApi.on('select', onSelect)
+        emblaApi.on('reInit', onSelect)
+    }, [emblaApi, onSelect])
+
+    const scrollTo = useCallback((index) => emblaApi && emblaApi.scrollTo(index), [emblaApi])
+
+    const slides = [
+        {
+            image: hero_gaming,
+            badge: "PRO GAMING GEAR",
+            heading: "Powerful Gaming Laptops",
+            subheading: "Next-gen RTX performance for competitive gaming and demanding creative workflows.",
+            btn1: "Shop Now",
+            btn2: "Explore Tech"
+        },
+        {
+            image: hero_student,
+            badge: "STUDENT ESSENTIALS",
+            heading: "Best Laptops for Higher Study",
+            subheading: "Lightweight, long-lasting, and powerful enough to handle every class and project.",
+            btn1: "Explore Now",
+            btn2: "View Range"
+        },
+        {
+            image: hero_business,
+            badge: "BUSINESS ELITE",
+            heading: "Laptops for Work & Office",
+            subheading: "Professional hardware built for maximum productivity and ultimate security.",
+            btn1: "Browse All",
+            btn2: "View Details"
         }
-    };
+    ]
 
     return (
-        <div className="relative h-[600px] sm:h-[750px] w-full rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 group bg-slate-950">
-            {/* Background Layer with Parallax & Tech Pattern */}
-            <div className="absolute inset-0 z-0">
-                <img 
-                    src={hero_tech} 
-                    className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-[3s] ease-out mix-blend-overlay" 
-                    alt="Premium High-Performance Laptop" 
-                />
-                
-                {/* Advanced Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
-                
-                {/* Subtle Grid Pattern */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none" 
-                    style={{ backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+        <div className="relative w-full overflow-hidden bg-slate-950 font-['Outfit',sans-serif] group">
+            {/* Slider Container */}
+            <div className="embla" ref={emblaRef}>
+                <div className="embla__container flex">
+                    {slides.map((slide, index) => (
+                        <div key={index} className="embla__slide relative flex-[0_0_100%] min-w-0 h-[550px] sm:h-[700px] lg:h-[850px]">
+                            {/* Background Layer with Ultra-Deep Overlay */}
+                            <div className="absolute inset-0 z-0">
+                                <img 
+                                    src={slide.image} 
+                                    className="w-full h-full object-cover opacity-90 transition-transform duration-[2s] hover:scale-105" 
+                                    alt={slide.heading} 
+                                />
+                                {/* Clean gradients for text focus */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
+                                <div className="absolute inset-0 bg-slate-950/20 mix-blend-multiply"></div>
+                            </div>
+
+                            {/* Content Layer */}
+                            <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-32">
+                                <div className={`max-w-4xl space-y-8 md:space-y-16 transition-all duration-1000 transform ${selectedIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+                                    
+                                    {/* Tech Status Badge - Minimalist Vertical Accent Style */}
+                                    <div className="flex items-center gap-6 border-l-2 border-blue-500 pl-6 h-10">
+                                        <span className="relative flex h-2.5 w-2.5">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-40"></span>
+                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]"></span>
+                                        </span>
+                                        <p className="font-bold text-[11px] md:text-sm text-slate-400 uppercase tracking-[0.5em]">
+                                            {slide.badge}
+                                        </p>
+                                    </div>
+
+                                    {/* Main Headline - Outfit Font & Natural Wrapping */}
+                                    <h2 className="text-4xl sm:text-7xl md:text-[6rem] lg:text-[7.5rem] leading-[1.05] md:leading-[0.95] font-black text-white uppercase tracking-tight max-w-[15ch] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                                        {slide.heading}
+                                        <span className="block h-1 w-24 bg-blue-500 mt-6 md:mt-10 rounded-full"></span>
+                                    </h2>
+
+                                    {/* Descriptive Subheading */}
+                                    <p className="text-slate-300 text-base md:text-xl lg:text-2xl font-medium max-w-lg md:max-w-xl leading-relaxed opacity-85 mt-2">
+                                        {slide.subheading}
+                                    </p>
+
+                                    {/* Action CTAs */}
+                                    <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 md:pt-8">
+                                        <button 
+                                            onClick={() => navigate('/collection')}
+                                            className="w-full sm:w-auto bg-white text-slate-950 px-14 py-5 rounded-xl font-black text-xs md:text-sm uppercase tracking-[0.3em] hover:bg-blue-600 hover:text-white transform hover:-translate-y-1.5 transition-all duration-500 shadow-2xl active:scale-95 group"
+                                        >
+                                            <span className="flex items-center gap-4">
+                                                {slide.btn1}
+                                                <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        
+                                        <button 
+                                            onClick={() => navigate('/collection')}
+                                            className="w-full sm:w-auto bg-transparent text-white border-2 border-white/10 px-14 py-5 rounded-xl font-black text-xs md:text-sm uppercase tracking-[0.3em] hover:border-blue-500/50 hover:bg-blue-500/5 transform hover:-translate-y-1.5 transition-all duration-500 backdrop-blur-md active:scale-95 group"
+                                        >
+                                            <span className="flex items-center gap-4">
+                                                {slide.btn2}
+                                                <div className="w-2.5 h-2.5 rounded-full bg-blue-500 group-hover:scale-150 transition-transform duration-500 shadow-[0_0_12px_rgba(59,130,246,0.7)]"></div>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Content Container */}
-            <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 max-w-5xl space-y-4 md:space-y-8">
-                
-                {/* Hardware Status Badge */}
-                <div className="inline-flex items-center gap-2 md:gap-3 px-3 py-1.5 md:px-4 md:py-2 bg-blue-500/10 border border-blue-500/20 rounded-full w-fit backdrop-blur-md animate-fade-in">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                    </span>
-                    <p className="font-black text-[10px] md:text-xs text-blue-400 uppercase tracking-[0.3em]">
-                        Best Deals Available Now
-                    </p>
-                </div>
-
-                 {/* Main Headline */}
-                <div className="space-y-2 md:space-y-4">
-                    <h1 className="text-3xl xs:text-4xl md:text-7xl lg:text-8xl leading-[1.1] md:leading-[0.9] font-black text-white uppercase tracking-tighter italic">
-                        Best Deals on<br />
-                        <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Laptops</span>
-                    </h1>
-                    
-                    {/* Specialized Segments Subheading */}
-                    <p className="text-slate-400 text-xs md:text-lg lg:text-xl font-medium max-w-xl leading-relaxed">
-                        Shop <span className="text-white font-bold italic">Gaming</span>, <span className="text-white font-bold italic">Student</span>, and <span className="text-white font-bold italic">Office Laptops</span> at the best prices. Experience high-performance mobile computing.
-                    </p>
-                </div>
-
-                {/* Dual Action CTAs */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 md:pt-6">
-                    <button 
-                        onClick={handleShopNow}
-                        className="w-full sm:w-auto bg-white text-slate-950 px-10 py-4 rounded-xl font-black text-xs md:text-sm uppercase tracking-[0.2em] hover:bg-blue-500 hover:text-white hover:-translate-y-1 transition-all duration-500 shadow-xl shadow-white/5 active:scale-95 group"
+            {/* Aesthetic Control: Sleek Progress Bars */}
+            <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex items-center gap-6 z-20">
+                {slides.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => scrollTo(index)}
+                        className={`group relative h-1 transition-all duration-700 ${
+                            selectedIndex === index ? 'w-24 bg-blue-500' : 'w-12 bg-white/10 hover:bg-white/30'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
                     >
-                        <span className="flex items-center gap-3">
-                            Shop Now
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </span>
+                        <span className={`absolute -top-2 left-0 h-[3px] bg-white transition-all duration-[5000ms] ease-linear ${selectedIndex === index ? 'w-full' : 'w-0 opacity-0'}`}></span>
                     </button>
-                    
-                    <button 
-                        onClick={handleExploreBrands}
-                        className="w-full sm:w-auto bg-slate-900/50 text-white border-2 border-slate-800 px-10 py-4 rounded-xl font-black text-xs md:text-sm uppercase tracking-[0.2em] hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1 transition-all duration-500 backdrop-blur-sm active:scale-95 group"
-                    >
-                        <span className="flex items-center gap-3">
-                            Explore All Laptops
-                            <div className="w-2 h-2 rounded-full bg-blue-500 group-hover:scale-150 transition-transform"></div>
-                        </span>
-                    </button>
-                </div>
-
-                {/* Technical Benchmarks Mask */}
-                <div className="hidden lg:grid grid-cols-3 gap-12 pt-12 border-t border-white/5 max-w-2xl">
-                    <div className="space-y-1">
-                        <p className="text-white font-black text-2xl tracking-tighter italic">RTX 40-SERIES</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Latest Technology</p>
-                    </div>
-                    <div className="space-y-1">
-                        <p className="text-white font-black text-2xl tracking-tighter italic">240Hz+</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Fast Displays</p>
-                    </div>
-                    <div className="space-y-1">
-                        <p className="text-white font-black text-2xl tracking-tighter italic">INTEL I9 / M3</p>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Top Performance</p>
-                    </div>
-                </div>
+                ))}
             </div>
 
-            {/* Visual Glassmorphic Accent */}
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-600/5 to-transparent pointer-events-none"></div>
+            {/* Immersive Edge Fades */}
+            <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-slate-950/70 to-transparent pointer-events-none z-10"></div>
+            <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-slate-950/70 to-transparent pointer-events-none z-10"></div>
 
-            {/* CSS Animation Logic */}
             <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes fade-in {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
+                .embla {
+                    overflow: hidden;
+                    height: 100%;
                 }
-                .animate-fade-in {
-                    animation: fade-in 0.8s ease-out forwards;
+                .embla__container {
+                    display: flex;
+                    height: 100%;
+                }
+                .embla__slide {
+                    flex: 0 0 100%;
+                    min-w: 0;
+                    height: 100%;
                 }
             ` }} />
         </div>

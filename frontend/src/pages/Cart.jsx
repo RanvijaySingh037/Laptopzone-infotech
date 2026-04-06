@@ -4,9 +4,13 @@ import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
-  const { products, cartItems, currency, updateQuantity, navigate } = useContext(ShopContext);
+  const { products, cartItems, currency, updateQuantity, navigate, token, clearBuyNow } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    clearBuyNow();
+  }, [clearBuyNow]);
 
   useEffect(() => {
     if (products.length > 0) {
@@ -184,7 +188,14 @@ const Cart = () => {
                 <CartTotal />
                 <div className='w-full mt-10 space-y-4'>
                     <button 
-                        onClick={() => navigate('/place-order')} 
+                        onClick={() => {
+                            if (!token) {
+                                localStorage.setItem('redirectAfterLogin', '/place-order');
+                                navigate('/login');
+                            } else {
+                                navigate('/place-order');
+                            }
+                        }} 
                         className='w-full bg-blue-700 text-white font-black text-xs uppercase tracking-[0.25em] py-6 px-10 rounded-2xl shadow-xl shadow-blue-100 hover:bg-slate-950 transition-all duration-500 flex items-center justify-center gap-3 group active:scale-[0.98]'
                     >
                         Proceed to Checkout

@@ -8,7 +8,7 @@ import SEO from '../components/SEO';
 const Product = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { products, currency, addToCart, toggleWishlist, wishlistItems } = useContext(ShopContext);
+  const { products, currency, addToCart, toggleWishlist, wishlistItems, token, setBuyNow } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState('');
   const [activeTab, setActiveTab] = useState('description');
@@ -33,8 +33,13 @@ const Product = () => {
   };
 
   const handleBuyNow = () => {
-    handleAddToCart();
-    navigate('/cart');
+    setBuyNow(productData._id, quantity);
+    if (!token) {
+        localStorage.setItem('redirectAfterLogin', '/place-order');
+        navigate('/login');
+        return;
+    }
+    navigate('/place-order');
   };
 
   if (loading) return (

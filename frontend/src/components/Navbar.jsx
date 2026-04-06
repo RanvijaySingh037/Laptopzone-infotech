@@ -6,7 +6,7 @@ import { ShopContext } from '../context/ShopContext';
 function Navbar() {
     const [visible, setVisible] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const { setShowSearch, getCartItems, navigate, token, setToken, setCartItems, getWishlistCount} = useContext(ShopContext);
+    const { setShowSearch, getCartItems, navigate, token, setToken, setCartItems, getWishlistCount, logout } = useContext(ShopContext);
     const location = useLocation();
 
     // Handle scroll effect
@@ -19,13 +19,6 @@ function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    const logout = () => {
-        navigate("/login");
-        localStorage.removeItem('token');
-        setToken("");
-        setCartItems({});
-    }
 
     const isActive = (path) => {
         return location.pathname === path;
@@ -81,60 +74,62 @@ function Navbar() {
                     </svg>
                 </div>
 
-                {/* Profile Dropdown */}
-                <div className="group relative">
-                    <div 
-                        onClick={() => token ? null : navigate('/login')} 
-                        className="p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
-                    >
-                        <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-
-                    {/* Enhanced Dropdown Menu */}
-                    {token && (
-                        <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-50">
-                            <div className="flex flex-col w-48 py-2 bg-white text-gray-600 rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
-                                <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-100">
-                                    <p className="text-sm font-semibold text-gray-800">Welcome back,</p>
-                                    <p className="text-xs text-gray-500">Your Account Details</p>
-                                </div>
-                                
-                                <button 
-                                    onClick={() => navigate('/profile')}
-                                    className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                    <span className="font-medium">My Profile</span>
-                                </button>
-                                
-                                <button 
-                                    onClick={() => navigate('/order')} 
-                                    className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                    </svg>
-                                    <span className="font-medium">My Orders</span>
-                                </button>
-                                
-                                <hr className="border-gray-200 my-1" />
-                                
-                                <button 
-                                    onClick={logout} 
-                                    className="w-full text-left px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-all duration-200 flex items-center gap-3"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    <span className="font-medium">Sign Out</span>
-                                </button>
-                            </div>
+                {token ? (
+                    <div className="group relative">
+                        <div 
+                            className="p-3 rounded-full hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+                        >
+                            <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
                         </div>
-                    )}
-                </div>
+
+                        {/* Enhanced Dropdown Menu */}
+                        <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-50">
+                             <div className="flex flex-col w-48 py-2 bg-white text-gray-600 rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
+                                 <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-100/50">
+                                     <p className="text-sm font-semibold text-gray-800">Welcome back,</p>
+                                     <p className="text-xs text-gray-500">Your Account Details</p>
+                                 </div>
+                                 
+                                 <button 
+                                     onClick={() => navigate('/profile')}
+                                     className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3">
+                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                     </svg>
+                                     <span className="font-medium">My Profile</span>
+                                 </button>
+                                 
+                                 <button 
+                                     onClick={() => navigate('/order')} 
+                                     className="w-full text-left px-4 py-3 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center gap-3"
+                                 >
+                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                     </svg>
+                                     <span className="font-medium">My Orders</span>
+                                 </button>
+                                 
+                                 <hr className="border-gray-50 my-1" />
+                                 
+                                 <button 
+                                     onClick={logout} 
+                                     className="w-full text-left px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-all duration-200 flex items-center gap-3"
+                                 >
+                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                     </svg>
+                                     <span className="font-medium">Sign Out</span>
+                                 </button>
+                             </div>
+                         </div>
+                    </div>
+                ) : (
+                    <Link to='/login' className="p-3 px-6 bg-slate-950 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg active:scale-95 shrink-0">
+                        Login / Sign Up
+                    </Link>
+                )}
 
                 {/* Wishlist Icon */}
                 <Link to="/wishlist" className="relative group p-3 rounded-full hover:bg-blue-50 transition-colors duration-200">
@@ -249,18 +244,18 @@ function Navbar() {
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
-                                Logout
+                                Sign Out
                             </button>
                         </div>
                     ) : (
                         <button 
                             onClick={() => {navigate('/login'); setVisible(false)}} 
-                            className="w-full py-4 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-semibold flex items-center justify-center gap-2"
+                            className="w-full py-4 px-4 bg-slate-900 text-white rounded-xl hover:bg-blue-700 transition-all duration-300 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            Login
+                            Login / Sign Up
                         </button>
                     )}
                 </div>

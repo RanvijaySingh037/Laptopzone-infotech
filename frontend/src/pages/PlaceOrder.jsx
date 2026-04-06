@@ -9,7 +9,7 @@ const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
   const [loading, setLoading] = useState(false);
 
-  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, currency } = useContext(ShopContext)
+  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, currency, isBuyNow, buyNowItem, clearBuyNow } = useContext(ShopContext)
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -44,6 +44,7 @@ const PlaceOrder = () => {
           const { data } = await axios.post(backendUrl + '/api/order/verifyRazorpay', response, { headers: { token } })
           if (data.success) {
             setCartItems({});
+            clearBuyNow();
             navigate('/orders');
           }
         } catch (error) {
@@ -60,16 +61,24 @@ const PlaceOrder = () => {
     setLoading(true); // 👈 Start loading
 
     try {
-      let orderItems = [];
-
-      for (const itemId in cartItems) {
-        if (cartItems[itemId] > 0) {
-          const itemInfo = products.find(product => product._id === itemId);
-          if (itemInfo) {
-            orderItems.push({
-              ...itemInfo,
-              quantity: cartItems[itemId]
-            });
+      if (isBuyNow && buyNowItem) {
+        const itemInfo = products.find(product => product._id === buyNowItem.productId);
+        if (itemInfo) {
+          orderItems.push({
+            ...itemInfo,
+            quantity: buyNowItem.quantity
+          });
+        }
+      } else {
+        for (const itemId in cartItems) {
+          if (cartItems[itemId] > 0) {
+            const itemInfo = products.find(product => product._id === itemId);
+            if (itemInfo) {
+              orderItems.push({
+                ...itemInfo,
+                quantity: cartItems[itemId]
+              });
+            }
           }
         }
       }
@@ -85,6 +94,7 @@ const PlaceOrder = () => {
           const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
           if (response.data.success) {
             setCartItems({});
+            clearBuyNow();
             navigate('/orders');
           }
           break;
@@ -267,22 +277,40 @@ const PlaceOrder = () => {
 
                {/* Quick Item Review */}
                <div className="space-y-4 mb-8 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
-                  {Object.entries(cartItems).map(([id, qty]) => {
-                     if (qty <= 0) return null;
-                     const item = products.find(p => p._id === id);
-                     if (!item) return null;
-                     return (
-                        <div key={id} className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 group transition-all">
-                           <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 border border-slate-100 overflow-hidden">
-                              <img src={item.image[0]} alt="" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500" />
-                           </div>
-                           <div className="min-w-0">
-                               <p className="text-[10px] font-black text-slate-800 truncate uppercase italic">{item.name}</p>
-                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{qty} Qty • {currency}{item.price.toLocaleString()}</p>
-                           </div>
-                        </div>
-                     );
-                  })}
+                  {isBuyNow && buyNowItem ? (
+                      (() => {
+                          const item = products.find(p => p._id === buyNowItem.productId);
+                          if (!item) return null;
+                          return (
+                              <div key={item._id} className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 group transition-all">
+                                  <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 border border-slate-100 overflow-hidden">
+                                      <img src={item.image[0]} alt="" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500" />
+                                  </div>
+                                  <div className="min-w-0">
+                                      <p className="text-[10px] font-black text-slate-800 truncate uppercase italic">{item.name}</p>
+                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{buyNowItem.quantity} Qty • {currency}{item.price.toLocaleString()}</p>
+                                  </div>
+                              </div>
+                          );
+                      })()
+                  ) : (
+                      Object.entries(cartItems).map(([id, qty]) => {
+                          if (qty <= 0) return null;
+                          const item = products.find(p => p._id === id);
+                          if (!item) return null;
+                          return (
+                              <div key={id} className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 group transition-all">
+                                  <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 border border-slate-100 overflow-hidden">
+                                      <img src={item.image[0]} alt="" className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500" />
+                                  </div>
+                                  <div className="min-w-0">
+                                      <p className="text-[10px] font-black text-slate-800 truncate uppercase italic">{item.name}</p>
+                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{qty} Qty • {currency}{item.price.toLocaleString()}</p>
+                                  </div>
+                              </div>
+                          );
+                      })
+                  )}
                </div>
 
                <div className="border-t border-slate-50 pt-8">

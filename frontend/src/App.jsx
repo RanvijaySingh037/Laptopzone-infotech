@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar'
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy Loaded Pages
 const Home = lazy(() => import('./pages/Home'))
@@ -74,12 +75,12 @@ const App = () => {
             <Route path='/product/:productId' element={<div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'><Product/></div>} />
             <Route path='/cart' element={<div className='w-full'><Cart/></div>} />
             <Route path='/login' element={<div className='w-full'><Login/></div>} />
-            <Route path='/place-Order' element={<div className='w-full'><PlaceOrder/></div>} />
-            <Route path='/Orders' element={<div className='w-full'><Order/></div>} />
-            <Route path="/order" element={<div className='w-full'><Order /></div>} />
-            <Route path="/verify" element={<div className='w-full'><Verify /></div>} />
-            <Route path='/wishlist' element={<div className='w-full'><Wishlist/></div>} />
-            <Route path="/profile" element={<div className='w-full'><Profile /></div>} />
+            <Route path='/place-Order' element={<ProtectedRoute><div className='w-full'><PlaceOrder/></div></ProtectedRoute>} />
+            <Route path='/Orders' element={<ProtectedRoute><div className='w-full'><Order/></div></ProtectedRoute>} />
+            <Route path="/order" element={<ProtectedRoute><div className='w-full'><Order /></div></ProtectedRoute>} />
+            <Route path="/verify" element={<ProtectedRoute><div className='w-full'><Verify /></div></ProtectedRoute>} />
+            <Route path='/wishlist' element={<ProtectedRoute><div className='w-full'><Wishlist/></div></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><div className='w-full'><Profile /></div></ProtectedRoute>} />
             
             {/* Support & Policy Routes */}
             <Route path="/faq" element={<div className='w-full'><FAQ /></div>} />

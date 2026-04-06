@@ -18,19 +18,24 @@ const Home = () => {
         keywords="high performance laptops, gaming pc, workstation, macbook, rtx 4090 laptop, business elitebook"
       />
       <div className='space-y-0'>
-        <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] pt-10">
-          <Hero />
+        {/* Full-width Hero Slider */}
+        <Hero />
+        
+        {/* Boxed Content Sections */}
+        <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] space-y-0'>
+          <ShopByBrand />
+          <ShopByUseCase />
+          <LatestCollection />
+          <BestSeller />
+          <BudgetRange />
         </div>
         
-        <ShopByBrand />
-        <ShopByUseCase />
-        <LatestCollection />
-        <BestSeller />
-        <BudgetRange />
-        
-        <div className="bg-slate-50">
-          <Ourpolicy />
-          <Newsletter />
+        {/* Policy & Newsletter Section */}
+        <div className="bg-slate-50 mt-20">
+          <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] border-t border-slate-100'>
+            <Ourpolicy />
+            <Newsletter />
+          </div>
         </div>
       </div>
     </div>

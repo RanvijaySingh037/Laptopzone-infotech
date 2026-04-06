@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { assets } from '../assets/assets'
 
 const Order = ({ token }) => {
+  const [activeTab, setActiveTab] = useState('verified')
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -41,12 +42,19 @@ const Order = ({ token }) => {
     fetchAllOrders()
   }, [token])
 
-  // Stats calculation
+  // Logic: COD is a verified "Order" because it's a commitment to pay on delivery.
+  // Razorpay orders are only "Verified" if payment is true.
+  const verifiedOrders = orders.filter(o => o.payment === true || o.paymentMethod === 'COD')
+  const incompleteOrders = orders.filter(o => o.payment === false && o.paymentMethod !== 'COD')
+
+  const currentOrders = activeTab === 'verified' ? verifiedOrders : incompleteOrders
+
+  // Stats calculation (Only for verified fleet by default)
   const stats = {
-    total: orders.length,
-    pending: orders.filter(o => o.status === 'OrderPlaced' || o.status === 'Packing').length,
-    shipped: orders.filter(o => o.status === 'Shipping' || o.status === 'Out for delivery').length,
-    delivered: orders.filter(o => o.status === 'Delivered').length
+    total: verifiedOrders.length,
+    pending: verifiedOrders.filter(o => o.status === 'OrderPlaced' || o.status === 'Packing').length,
+    shipped: verifiedOrders.filter(o => o.status === 'Shipping' || o.status === 'Out for delivery').length,
+    delivered: verifiedOrders.filter(o => o.status === 'Delivered').length
   }
 
   const getStatusColor = (status) => {
@@ -76,15 +84,15 @@ const Order = ({ token }) => {
         {/* Operational Overview Header */}
         <div className='flex flex-col md:flex-row justify-between items-end gap-8 pb-10 border-b border-slate-200'>
           <div className='space-y-2'>
-            <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-2 px-1">Hardware Logistics Panel</h3>
-            <h1 className="text-4xl font-black text-slate-900 uppercase tracking-tighter italic">Fulfillment Terminal</h1>
+            <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-2 px-1">Orders Dashboard</h3>
+            <h1 className="text-4xl font-black text-slate-900 uppercase tracking-tighter italic">Order Management</h1>
           </div>
           <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 w-full md:w-auto'>
             {[
-              { label: 'Total Fleet', count: stats.total, color: 'text-slate-900 border-slate-200' },
-              { label: 'Allocating', count: stats.pending, color: 'text-amber-600 border-amber-100' },
-              { label: 'In Transit', count: stats.shipped, color: 'text-indigo-600 border-indigo-100' },
-              { label: 'Deployed', count: stats.delivered, color: 'text-emerald-600 border-emerald-100' }
+              { label: 'Total Orders', count: stats.total, color: 'text-slate-900 border-slate-200' },
+              { label: 'Processing', count: stats.pending, color: 'text-amber-600 border-amber-100' },
+              { label: 'Shipped', count: stats.shipped, color: 'text-indigo-600 border-indigo-100' },
+              { label: 'Delivered', count: stats.delivered, color: 'text-emerald-600 border-emerald-100' }
             ].map((stat, i) => (
               <div key={i} className={`bg-white px-6 py-4 rounded-2xl shadow-sm border ${stat.color} flex flex-col items-center`}>
                 <p className='text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1'>{stat.label}</p>
@@ -94,27 +102,49 @@ const Order = ({ token }) => {
           </div>
         </div>
 
+        {/* System Filter Tabs */}
+        <div className='flex items-center gap-2 p-1.5 bg-slate-100 w-fit rounded-2xl border border-slate-200'>
+          <button 
+            onClick={() => setActiveTab('verified')}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-3 ${activeTab === 'verified' ? 'bg-white text-blue-600 shadow-md ring-1 ring-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            Completed Orders
+            <span className={`px-2 py-0.5 rounded-md text-[8px] ${activeTab === 'verified' ? 'bg-blue-50 text-blue-600' : 'bg-slate-200 text-slate-500'}`}>
+              {verifiedOrders.length}
+            </span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('incomplete')}
+            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-3 ${activeTab === 'incomplete' ? 'bg-white text-red-600 shadow-md ring-1 ring-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            Pending Payments
+            <span className={`px-2 py-0.5 rounded-md text-[8px] ${activeTab === 'incomplete' ? 'bg-red-50 text-red-600' : 'bg-slate-200 text-slate-500'}`}>
+              {incompleteOrders.length}
+            </span>
+          </button>
+        </div>
+
         {/* Orders Table-like Cards */}
         <div className="space-y-8 pb-20">
-          {orders.length > 0 ? (
-            orders.map((order, index) => (
+          {currentOrders.length > 0 ? (
+            currentOrders.map((order, index) => (
               <div key={index} className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-white hover:border-blue-100 transition-all duration-500 overflow-hidden animate-fade-in" style={{animationDelay: `${index * 0.05}s`}}>
                 {/* Card Header: Logistics ID & Date */}
                 <div className='bg-slate-50/50 px-8 py-5 border-b border-slate-50 flex flex-wrap justify-between items-center gap-4'>
                     <div className='flex items-center gap-4'>
                         <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black italic shadow-lg">L</div>
                         <div>
-                            <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1'>Logistics System ID</p>
+                            <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1'>Order ID</p>
                             <p className='text-sm font-black text-slate-800 tracking-tighter uppercase leading-none'>#{order._id.slice(-8)}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-8'>
                         <div className='text-right'>
-                            <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1'>Allocation Date</p>
+                            <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1'>Order Date</p>
                             <p className='text-xs font-bold text-slate-700 tracking-tight leading-none'>{new Date(order.date).toLocaleDateString()}</p>
                         </div>
                         <div className={`px-4 py-2 rounded-full border text-[9px] font-black uppercase tracking-[0.2em] italic ${getStatusColor(order.status)} animate-pulse`}>
-                            {order.status === 'OrderPlaced' ? 'Pending Allocation' : order.status}
+                            {order.status === 'OrderPlaced' ? 'Pending' : order.status}
                         </div>
                     </div>
                 </div>
@@ -126,7 +156,7 @@ const Order = ({ token }) => {
                     <div className='space-y-6'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='w-1.5 h-1.5 bg-blue-600 rounded-full'></div>
-                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Customer Profile</h4>
+                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Customer Details</h4>
                         </div>
                         <div className='bg-slate-50/50 p-6 rounded-3xl border border-slate-50 space-y-4'>
                             <p className='text-lg font-black text-slate-950 uppercase italic leading-none'>
@@ -150,7 +180,7 @@ const Order = ({ token }) => {
                     <div className='space-y-6'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='w-1.5 h-1.5 bg-indigo-600 rounded-full'></div>
-                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Hardware Components</h4>
+                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Product Details</h4>
                         </div>
                         <div className='space-y-4'>
                             {order.items.map((item, i) => (
@@ -161,7 +191,7 @@ const Order = ({ token }) => {
                                     <div className='flex-1 min-w-0'>
                                         <p className='text-xs font-black text-slate-900 uppercase italic truncate'>{item.name}</p>
                                         <div className='flex items-center gap-2 mt-1'>
-                                            <span className='text-[8px] bg-slate-900 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest'>X{item.quantity} Unit</span>
+                                            <span className='text-[8px] bg-slate-900 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest'>X{item.quantity} Units</span>
                                             <span className='text-[8px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md font-black uppercase tracking-widest'>{item.size || 'Standard'}</span>
                                         </div>
                                     </div>
@@ -174,36 +204,37 @@ const Order = ({ token }) => {
                     <div className='space-y-6'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='w-1.5 h-1.5 bg-emerald-600 rounded-full'></div>
-                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Financial Terminal</h4>
+                            <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest'>Payment Details</h4>
                         </div>
                         <div className='space-y-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-50'>
                             <div className='flex justify-between items-end'>
                                 <p className='text-[24px] font-black text-slate-950 tracking-tighter italic leading-none'>{currency}{order.amount.toLocaleString()}</p>
                                 <div className='text-right'>
                                     <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1'>Method</p>
-                                    <p className='text-[10px] font-black text-slate-700 uppercase italic'>{order.paymentMethod}</p>
+                                    <p className='text-[10px] font-black text-slate-700 uppercase italic'>{order.paymentMethod === 'COD' ? 'Cash on Delivery' : order.paymentMethod}</p>
                                 </div>
                             </div>
                             
                             <div className='flex items-center gap-3 py-3 border-y border-white/50'>
                                 <div className={`w-2 h-2 rounded-full ${order.payment ? 'bg-emerald-500 animate-pulse' : 'bg-red-500 animate-pulse'}`}></div>
                                 <p className='text-[10px] font-black text-slate-500 uppercase tracking-widest'>
-                                    Transaction: <span className={order.payment ? 'text-emerald-700' : 'text-red-600'}>{order.payment ? 'Verified' : 'Incomplete'}</span>
+                                    Payment: <span className={order.payment ? 'text-emerald-700' : 'text-red-600'}>{order.payment ? 'Paid' : 'Pending'}</span>
                                 </p>
                             </div>
 
                             <div className='space-y-3 pt-2'>
-                                <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest'>Logistics Deployment Status</p>
+                                <p className='text-[8px] font-black text-slate-400 uppercase tracking-widest'>Delivery Status</p>
                                 <select 
                                     onChange={(event) => statusHandler(event, order._id)} 
                                     value={order.status} 
                                     className="w-full bg-slate-900 text-white rounded-xl border-none shadow-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-blue-500 cursor-pointer hover:bg-slate-800 transition-colors"
                                 >
-                                    <option value="OrderPlaced">Order Allocated</option>
-                                    <option value="Packing">In Preparation</option>
-                                    <option value="Shipping">Dispatch Shipped</option>
-                                    <option value="Out for delivery">Deployment Active</option>
-                                    <option value="Delivered">Fulfillment Done</option>
+                                    <option value="OrderPlaced">Order Placed</option>
+                                    <option value="Packing">Preparing</option>
+                                    <option value="Packing">Packing</option>
+                                    <option value="Shipping">Shipped</option>
+                                    <option value="Out for delivery">Out for Delivery</option>
+                                    <option value="Delivered">Delivered</option>
                                 </select>
                             </div>
                         </div>

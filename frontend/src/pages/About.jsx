@@ -20,17 +20,17 @@ const About = () => {
               <img 
                 className='w-full h-[500px] object-cover rounded-[2rem] shadow-2xl relative z-10 border border-white' 
                 src={assets.about_img} 
-                alt="LaptopZone Experience Center" 
+                alt="Professional Tech Workspace - LaptopZone" 
               />
             </div>
             <div className='space-y-8'>
               <div>
                 <h3 className='text-3xl font-black text-slate-800 mb-6 uppercase tracking-tighter italic'>Who We Are</h3>
                 <p className='text-slate-500 font-medium leading-relaxed mb-4'>
-                  LaptopZone Infotech is a leading technology retailer in India, dedicated to bridging the gap between high-end hardware and tech enthusiasts. Founded with a vision to simplify the laptop buying experience, we have grown from a local hardware hub into a national trusted partner for individual professionals and large scale enterprises.
+                  LaptopZone Infotech is India's premier destination for high-performance computing solutions. Founded with a vision to simplify the laptop buying experience, we have evolved from a specialized hardware hub into a national trusted partner for professionals, students, and enterprises across the country.
                 </p>
                 <p className='text-slate-500 font-medium leading-relaxed'>
-                  Our team consists of certified tech experts and advisors who understand that a laptop isn't just a machine—it's the engine for your career, education, and creativity.
+                  Our team consists of certified hardware experts and tech advisors who believe that a laptop isn't just a machine—it's the engine for your career, education, and creative breakthrough.
                 </p>
               </div>
             </div>

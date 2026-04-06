@@ -99,19 +99,22 @@ const Footer = () => {
                     <div className='w-7 h-7 bg-white/5 rounded-md flex items-center justify-center text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all'>
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                     </div>
-                    <span className='text-xs font-black text-slate-300'>+91 9534311604</span>
+                    <div className='flex flex-col'>
+                      <span className='text-[10px] font-black text-slate-300'>+91 62997 45525</span>
+                      <span className='text-[10px] font-black text-slate-300'>+91 99557 48826</span>
+                    </div>
                 </div>
                 <div className='flex items-center gap-3 group'>
                     <div className='w-7 h-7 bg-white/5 rounded-md flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-500/10 transition-all'>
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     </div>
-                    <span className='text-xs font-black text-slate-300'>support@laptopzoneinfotech.com</span>
+                    <span className='text-xs font-black text-slate-300'>support@laptopzone.com</span>
                 </div>
                 <div className='flex items-center gap-3 group'>
                     <div className='w-7 h-7 bg-white/5 rounded-md flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:bg-emerald-500/10 transition-all'>
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
                     </div>
-                    <span className='text-xs font-black text-slate-300'>Gopalganj, Bihar</span>
+                    <span className='text-[10px] font-black text-slate-300 leading-tight'>Babubarhi, Madhubani, Bihar - 847224</span>
                 </div>
                 <div className='pt-2'>
                     <span className='text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white/5 px-2.5 py-1.5 rounded-md border border-white/5'>

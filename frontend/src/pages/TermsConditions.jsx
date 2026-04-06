@@ -39,7 +39,7 @@ const TermsConditions = () => {
 
                     <h3 className='text-xl font-black text-slate-800 mb-6 uppercase tracking-tighter italic'>5. Governing Law</h3>
                     <p className='font-medium leading-relaxed mb-8'>
-                        These terms and conditions are governed by the laws of India. Any disputes will be subject to the exclusive jurisdiction of the courts in New Delhi.
+                        These terms and conditions are governed by the laws of India. Any disputes will be subject to the exclusive jurisdiction of the courts in Madhubani, Bihar.
                     </p>
                 </div>
             </div>

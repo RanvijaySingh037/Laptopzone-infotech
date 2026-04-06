@@ -45,7 +45,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1'>Call Us</h4>
-                    <p className='text-slate-900 font-black text-xl tracking-tight'>+91 9534311604</p>
+                    <p className='text-slate-900 font-black text-xl tracking-tight'>+91 62997 45525</p>
+                    <p className='text-slate-900 font-black text-xl tracking-tight'>+91 99557 48826</p>
                     <p className='text-xs text-slate-500 font-medium'>Available Mon-Sat, 10 AM - 7 PM</p>
                   </div>
                 </div>
@@ -67,7 +68,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className='text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1'>Our Store</h4>
-                    <p className='text-slate-900 font-black text-xl tracking-tight'>New Delhi, India</p>
+                    <p className='text-slate-900 font-black text-lg tracking-tight leading-tight'>Babubarhi, Hospital Road, Near Registry Office, Madhubani, Bihar - 847224</p>
                     <p className='text-xs text-slate-500 font-medium'>Main Branch & Tech Hub</p>
                   </div>
                 </div>

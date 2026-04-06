@@ -61,8 +61,8 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900">Our Store</h3>
-                    <p className="text-gray-600">845305, Bank Road, Street 18</p>
-                    <p className="text-gray-600">Raxaul, Bihar, India</p>
+                    <p className="text-gray-600 text-sm leading-tight">Babubarhi, Hospital Road, Near Registry Office</p>
+                    <p className="text-gray-600 text-sm">Madhubani, Bihar - 847224</p>
                   </div>
                 </div>
 
@@ -73,8 +73,9 @@ const ContactSection = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-gray-600">Tel: (+91) 9534311604</p>
-                    <p className="text-gray-600">Email: gulshan@gmail.com</p>
+                    <p className="text-gray-600">Tel: (+91) 62997 45525</p>
+                    <p className="text-gray-600">Tel: (+91) 99557 48826</p>
+                    <p className="text-gray-600">Email: support@laptopzone.com</p>
                   </div>
                 </div>
               </div>

@@ -130,6 +130,21 @@ const Footer = () => {
           <p className='text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]'>
             © 2026 LaptopZone Infotech. All rights reserved.
           </p>
+          
+          <div className='flex items-center gap-1.5'>
+              <span className='text-slate-500 text-[10px] font-medium'>Crafted with</span>
+              <span className='text-red-500/70 text-[11px]'>❤️</span>
+              <span className='text-slate-500 text-[10px] font-medium'>by</span>
+              <a 
+                href="https://rganexvora.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className='text-slate-400 hover:text-blue-400 text-[10px] font-bold transition-all duration-300 border-b border-transparent hover:border-blue-400/30 pb-0.5'
+              >
+                RGA Nexvora
+              </a>
+          </div>
+
           <div className='flex space-x-8'>
             <Link to="/compliance" className='text-slate-600 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-200'>Compliance</Link>
             <Link to="/security" className='text-slate-600 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors duration-200'>Security</Link>

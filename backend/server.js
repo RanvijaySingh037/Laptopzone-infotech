@@ -10,7 +10,6 @@ import orderRouter from './routes/orderRoute.js'
 import categoryRouter from './routes/categoryRoute.js'
 import brandRouter from './routes/brandRoute.js'
 import wishlistRouter from './routes/wishlistRoute.js'
-import keepAlive from './utils/keepAlive.js'
 
 // App Config
 const app = express()
@@ -44,5 +43,4 @@ app.get('/',(req,res)=>{
 
 app.listen(port, () => {
     console.log('Server started on PORT : '+port);
-    keepAlive();
 });

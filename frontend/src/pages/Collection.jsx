@@ -17,6 +17,8 @@ const Collection = () => {
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState('relevant');
   const [loading, setLoading] = useState(true);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 200000 });
+  const [conditions, setConditions] = useState([]);
 
   // Get active filter names for SEO
   const activeBrandNames = brands.filter(b => brandFilter.includes(b._id)).map(b => b.name);
@@ -59,8 +61,17 @@ const Collection = () => {
     setCategory([]);
     setBrandFilter([]);
     setSubCategory([]);
+    setConditions([]);
+    setPriceRange({ min: 0, max: 200000 });
     setSortType('relevant');
     setSearchParams({});
+  };
+
+  const toggleCondition = (e) => {
+    const { value } = e.target;
+    setConditions((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
   };
 
   const applyFilterAndSort = () => {
@@ -103,6 +114,14 @@ const Collection = () => {
       });
     }
 
+    // Apply Price filter
+    productsCopy = productsCopy.filter((item) => item.price >= priceRange.min && item.price <= priceRange.max);
+
+    // Apply Condition filter
+    if (conditions.length > 0) {
+      productsCopy = productsCopy.filter((item) => conditions.includes(item.condition));
+    }
+
     // Apply sorting
     switch (sortType) {
       case 'low-high':
@@ -129,7 +148,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilterAndSort();
-  }, [category, brandFilter, subCategory, search, showSearch, sortType, products]);
+  }, [category, brandFilter, subCategory, search, showSearch, sortType, products, priceRange, conditions]);
 
 
   return (
@@ -219,6 +238,54 @@ const Collection = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Conditions */}
+              <div className="space-y-6 pt-8 border-t border-slate-50">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Condition</p>
+                <div className="grid grid-cols-1 gap-3">
+                  {['New', 'Refurbished', 'Used'].map((cond) => (
+                    <label key={cond} className="flex items-center gap-3 cursor-pointer group">
+                      <div className="relative flex items-center">
+                        <input 
+                          type="checkbox" 
+                          checked={conditions.includes(cond)}
+                          value={cond}
+                          onChange={toggleCondition}
+                          className="peer appearance-none w-5 h-5 border-2 border-slate-200 rounded-lg checked:bg-blue-600 checked:border-blue-600 transition-all cursor-pointer"
+                        />
+                        <svg className="absolute w-3 h-3 text-white left-1 pointer-events-none hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="text-sm font-bold text-slate-600 group-hover:text-blue-700 transition-colors uppercase tracking-tight">{cond}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div className="space-y-6 pt-8 border-t border-slate-50">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Price Range</p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-2 items-center">
+                    <input 
+                      type="number" 
+                      placeholder="Min" 
+                      value={priceRange.min}
+                      onChange={(e) => setPriceRange({...priceRange, min: Number(e.target.value)})}
+                      className="w-full bg-slate-50 border border-slate-100 px-3 py-2 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                    <span className="text-slate-300">-</span>
+                    <input 
+                      type="number" 
+                      placeholder="Max" 
+                      value={priceRange.max}
+                      onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value)})}
+                      className="w-full bg-slate-50 border border-slate-100 px-3 py-2 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -285,6 +352,7 @@ const Collection = () => {
                     storage={item.storage}
                     displaySize={item.displaySize}
                     brand={item.brand?.name || item.brand}
+                    condition={item.condition}
                   />
                 ))}
               </div>

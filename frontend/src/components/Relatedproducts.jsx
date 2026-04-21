@@ -88,6 +88,7 @@ const RelatedProducts = ({ category, subCategory, currentProductId, brand, price
                 storage={item.storage}
                 displaySize={item.displaySize}
                 brand={item.brand?.name || item.brand}
+                condition={item.condition}
               />
             </div>
           ))

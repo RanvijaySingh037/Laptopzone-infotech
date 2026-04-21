@@ -70,6 +70,7 @@ const BestSeller = () => {
                       storage={item.storage}
                       displaySize={item.displaySize}
                       brand={item.brand?.name || item.brand}
+                      condition={item.condition}
                   />
                 </div>
               </div>
